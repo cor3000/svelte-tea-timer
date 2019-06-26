@@ -48,8 +48,14 @@ input[type="range"] {
 }
 
 button {
-	background-color: #f4f4f4;
+	background-color: darkgreen;
 	outline: none;
+	border: none;
+	color: white;
+	height: 2em;
+	line-height: 1.5em;
+	padding: 0.25em 1em;
+	border-radius: 0.2em;
 }
 
 button:active {
