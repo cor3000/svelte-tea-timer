@@ -7,21 +7,46 @@
   const teaRecipes = [
     {
       id: "000",
-      name: "oolong",
-      label: "烏龍茶",
+      name: "gaoshan",
+      label: "高山茶",
       brewTimes: [80, 40, 50, 60, 80, 100]
     },
     {
       id: "001",
+      name: "jinxuan",
+      label: "金萱茶",
+      brewTimes: [75, 35, 55, 70, ]
+    },
+    {
+      id: "002",
+      name: "oolong",
+      label: "烏龍茶",
+      brewTimes: [75, 35, 55, 70, ]
+    },
+   
+    {
+      id: "003",
       name: "baozhong",
       label: "包種茶",
       brewTimes: [30, 20, 25, 30, 40]
     },
     {
-      id: "002",
+      id: "004",
       name: "blacktea",
       label: "紅茶",
       brewTimes: [30, 35, 40, 60]
+    },
+    {
+      id: "005",
+      name: "orientalbeauty",
+      label: "東方美人茶",
+      brewTimes: [40, 45, 50, 70]
+    },
+    {
+      id: "006",
+      name: "puer",
+      label: "普洱茶",
+      brewTimes: [60, 20, 25, 30, 40, 50, 60]
     }
   ];
 

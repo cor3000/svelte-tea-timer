@@ -119,7 +119,6 @@
   </ul>
   <button on:click={toggleTimer}>{formatTime(remainingTime)}</button>
 </div>
-
 <div class="nav">
   <button on:click={prev}>prev</button>
   <button on:click={next}>next</button>
