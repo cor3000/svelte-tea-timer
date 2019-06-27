@@ -27,6 +27,12 @@
   function enterRecipe(event) {
     currentRecipe = event.detail;
     saveCurrentRecipe(currentRecipe);
+
+    setTimeout(function() {
+      if (Notification && Notification.requestPermission) {
+        Notification.requestPermission();
+      }
+    }, 0);
   }
 
   function listRecipes() {
@@ -37,7 +43,6 @@
 
 <style>
   h1 {
-    color: darkgreen;
     font-size: 5em;
     text-align: center;
   }
