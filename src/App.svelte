@@ -3,32 +3,51 @@
   import BrewSchedule from "./BrewSchedule.svelte";
 
   export let title;
-  let teaRecipes = [
+
+  const teaRecipes = [
     {
+      id: "000",
       name: "oolong",
       label: "烏龍茶",
       brewTimes: [80, 40, 50, 60, 80, 100]
     },
     {
+      id: "001",
       name: "baozhong",
       label: "包種茶",
       brewTimes: [30, 20, 25, 30, 40]
     },
     {
+      id: "002",
       name: "blacktea",
       label: "紅茶",
       brewTimes: [30, 35, 40, 60]
     }
   ];
-  let currentRecipe = null;
 
-  function showRecipe(event) {
-    console.log(this, event);
-    currentRecipe = event.detail;
+  let currentRecipe = loadCurrentRecipe(teaRecipes);
+
+  function loadCurrentRecipe(recipes) {
+    const recipeId = localStorage.getItem("currentRecipeId");
+    return recipes.find(recipe => recipe.id == recipeId) || null;
   }
 
-  function showRecipes() {
+  function saveCurrentRecipe(recipe) {
+    if (recipe == null) {
+      localStorage.removeItem("currentRecipeId");
+    } else {
+      localStorage.setItem("currentRecipeId", recipe.id);
+    }
+  }
+
+  function enterRecipe(event) {
+    currentRecipe = event.detail;
+    saveCurrentRecipe(currentRecipe);
+  }
+
+  function listRecipes() {
     currentRecipe = null;
+    saveCurrentRecipe(currentRecipe);
   }
 </script>
 
@@ -45,14 +64,14 @@
 </style>
 
 {#if currentRecipe !== null}
-  <button on:click={showRecipes} style="position: absolute;">back</button>
+  <button on:click={listRecipes} style="position: absolute;">back</button>
 {/if}
 <h1>{title}</h1>
 <div>
   {#if currentRecipe === null}
     <ul>
       {#each teaRecipes as recipe}
-        <TeaRecipe {recipe} on:clickRecipe={showRecipe} />
+        <TeaRecipe {recipe} on:clickRecipe={enterRecipe} />
       {/each}
     </ul>
   {:else}
