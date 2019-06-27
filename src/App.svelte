@@ -9,26 +9,25 @@
       id: "000",
       name: "gaoshan",
       label: "高山茶",
-      brewTimes: [80, 40, 50, 60, 80, 100]
+      brewTimes: [80, 40, 50, 60, 80]
     },
     {
       id: "001",
       name: "jinxuan",
       label: "金萱茶",
-      brewTimes: [75, 35, 55, 70, ]
+      brewTimes: [75, 35, 55, 70]
     },
     {
       id: "002",
-      name: "oolong",
-      label: "烏龍茶",
-      brewTimes: [75, 35, 55, 70, ]
-    },
-   
-    {
-      id: "003",
       name: "baozhong",
       label: "包種茶",
       brewTimes: [30, 20, 25, 30, 40]
+    },
+    {
+      id: "003",
+      name: "oolong",
+      label: "烏龍茶",
+      brewTimes: [50, 35, 40, 50]
     },
     {
       id: "004",
@@ -46,7 +45,7 @@
       id: "006",
       name: "puer",
       label: "普洱茶",
-      brewTimes: [60, 20, 25, 30, 40, 50, 60]
+      brewTimes: [80, 10, 15, 15, 20, 30, 40, 60]
     }
   ];
 
