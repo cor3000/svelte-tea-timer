@@ -1,8 +1,12 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { recipeBg } from "./dynStyles.js";
+
   const dispatch = createEventDispatcher();
 
   export let recipe;
+
+  const bgStyle = recipeBg(recipe);
 
   const clickRecipe = event => {
     dispatch("clickRecipe", recipe);
@@ -11,8 +15,7 @@
 
 <style>
   li {
-    background-color: DarkGreen;
-    color: white;
+    color: rgb(201, 185, 168);
     font-size: 3rem;
     list-style: none;
     line-height: 1.5em;
@@ -21,7 +24,8 @@
     text-align: center;
     margin: 0.5rem;
     padding: 0;
+    cursor: pointer;
   }
 </style>
 
-<li on:click={clickRecipe}>{recipe.label}</li>
+<li {...bgStyle} on:click={clickRecipe}> {recipe.label} </li>

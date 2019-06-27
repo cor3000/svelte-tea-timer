@@ -1,4 +1,7 @@
 <script>
+  import { onDestroy } from "svelte";
+  import { recipeBg } from "./dynStyles.js";
+
   export let recipe;
 
   const formatTime = duration => {
@@ -19,6 +22,9 @@
   let startTime = null;
   let timerId = null;
   let remainingTime = 0;
+
+  const bgStyle = recipeBg(recipe);
+
   resetTimer();
 
   function prev() {
@@ -32,6 +38,10 @@
   function finish() {
     document.getElementById("bing").play();
     next();
+    if (Notification && Notification.permission === "granted") {
+      const notification = new Notification("Tea Ready!!");
+      setTimeout(notification.close.bind(notification), 4000);
+    }
   }
 
   function resetTimer() {
@@ -54,21 +64,20 @@
   function toggleTimer() {
     if (running) {
       resetTimer();
-      console.log("toggle reset");
       return;
     }
-    console.log("toggle start");
     resetTimer();
     running = true;
     startTime = Date.now();
     timerId = setInterval(updateTimer, recipe.brewTimes[currentIndex], 100);
   }
+
+  onDestroy(resetTimer);
 </script>
 
 <style>
   .teaLabel {
-    background-color: DarkGreen;
-    color: white;
+    color: rgb(201, 185, 168);
     font-size: 3rem;
     line-height: 1.5em;
     vertical-align: middle;
@@ -78,7 +87,7 @@
     padding: 0;
   }
   .current {
-    color: red;
+    color: rgb(170, 100, 78);
   }
   div.times,
   div.nav {
@@ -103,11 +112,12 @@
     padding: 0;
   }
   button {
+    color: rgb(201, 185, 168);
     font-size: 2em;
   }
 </style>
 
-<div class="teaLabel">{recipe.label}</div>
+<div class="teaLabel" {...bgStyle}> {recipe.label} </div>
 <audio src="Bing.mp3" id="bing" />
 <div class="times">
   <ul>
@@ -117,9 +127,11 @@
       </li>
     {/each}
   </ul>
-  <button on:click={toggleTimer}>{formatTime(remainingTime)}</button>
+  <button {...bgStyle} on:click={toggleTimer}>
+     {formatTime(remainingTime)}
+  </button>
 </div>
 <div class="nav">
-  <button on:click={prev}>prev</button>
-  <button on:click={next}>next</button>
+  <button {...bgStyle} on:click={prev}>prev</button>
+  <button {...bgStyle} on:click={next}>next</button>
 </div>

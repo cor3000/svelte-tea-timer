@@ -2,54 +2,14 @@
   import TeaRecipe from "./TeaRecipe.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
 
+  import { recipes as teaRecipes } from "./defaultRecipes.js";
+  import { recipeBg, recipeFg } from "./dynStyles.js";
+
   export let title;
 
-  const teaRecipes = [
-    {
-      id: "000",
-      name: "gaoshan",
-      label: "高山茶",
-      brewTimes: [80, 40, 50, 60, 80]
-    },
-    {
-      id: "001",
-      name: "jinxuan",
-      label: "金萱茶",
-      brewTimes: [75, 35, 55, 70]
-    },
-    {
-      id: "002",
-      name: "baozhong",
-      label: "包種茶",
-      brewTimes: [30, 20, 25, 30, 40]
-    },
-    {
-      id: "003",
-      name: "oolong",
-      label: "烏龍茶",
-      brewTimes: [50, 35, 40, 50]
-    },
-    {
-      id: "004",
-      name: "blacktea",
-      label: "紅茶",
-      brewTimes: [30, 35, 40, 60]
-    },
-    {
-      id: "005",
-      name: "orientalbeauty",
-      label: "東方美人茶",
-      brewTimes: [40, 45, 50, 70]
-    },
-    {
-      id: "006",
-      name: "puer",
-      label: "普洱茶",
-      brewTimes: [80, 10, 15, 15, 20, 30, 40, 60]
-    }
-  ];
-
   let currentRecipe = loadCurrentRecipe(teaRecipes);
+  $: bgStyle = recipeBg(currentRecipe);
+  $: fgStyle = recipeFg(currentRecipe);
 
   function loadCurrentRecipe(recipes) {
     const recipeId = localStorage.getItem("currentRecipeId");
@@ -85,12 +45,16 @@
     margin: 0;
     padding: 0;
   }
+  button.back {
+    color: rgb(201, 185, 168);
+    position: absolute;
+  }
 </style>
 
 {#if currentRecipe !== null}
-  <button on:click={listRecipes} style="position: absolute;">back</button>
+  <button on:click={listRecipes} class="back" {...bgStyle}>back</button>
 {/if}
-<h1>{title}</h1>
+<h1 {...fgStyle}>{title}</h1>
 <div>
   {#if currentRecipe === null}
     <ul>

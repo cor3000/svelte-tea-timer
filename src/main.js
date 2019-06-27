@@ -7,4 +7,6 @@ const app = new App({
 	}
 });
 
+if (Notification) Notification.requestPermission();
+
 export default app;
