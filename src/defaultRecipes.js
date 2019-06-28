@@ -3,51 +3,51 @@ import { palette } from "./dynStyles.js"
 export const recipes = [
     {
         id: "000",
-        name: "gaoshan",
+        name: "High Mountain Tea",
         label: "高山茶",
         color: palette[0],
         brewTimes: [80, 40, 50, 60, 80]
     },
     {
         id: "001",
-        name: "jinxuan",
+        name: "Jin Xuan Tea",
         label: "金萱茶",
         color: palette[1],
         brewTimes: [75, 35, 55, 70]
     },
     {
         id: "002",
-        name: "baozhong",
+        name: "Bao Zhong Tea",
         label: "包種茶",
-        color: palette[3],
+        color: palette[2],
         brewTimes: [30, 20, 25, 30, 40]
     },
     {
         id: "003",
-        name: "oolong",
+        name: "Oolong Tea",
         label: "烏龍茶",
-        color: palette[6],
+        color: palette[3],
         brewTimes: [50, 35, 40, 50]
     },
     {
         id: "004",
-        name: "orientalbeauty",
+        name: "Oriental Beauty",
         label: "東方美人茶",
-        color: palette[8],
+        color: palette[4],
         brewTimes: [40, 45, 50, 70]
     },
     {
         id: "005",
-        name: "blacktea",
+        name: "Black Tea",
         label: "紅茶",
-        color: palette[10],
+        color: palette[5],
         brewTimes: [30, 35, 40, 60]
     },
     {
         id: "006",
-        name: "puer",
+        name: "Pu'er Tea",
         label: "普洱茶",
-        color: palette[11],
+        color: palette[6],
         brewTimes: [80, 10, 15, 15, 20, 30, 40, 60]
     }
 ];

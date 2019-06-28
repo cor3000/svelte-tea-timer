@@ -1,5 +1,5 @@
 <script>
-  import TeaRecipe from "./TeaRecipe.svelte";
+  import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
 
   import { recipes as teaRecipes } from "./defaultRecipes.js";
@@ -9,7 +9,6 @@
 
   let currentRecipe = loadCurrentRecipe(teaRecipes);
   $: bgStyle = recipeBg(currentRecipe);
-  $: fgStyle = recipeFg(currentRecipe);
 
   function loadCurrentRecipe(recipes) {
     const recipeId = localStorage.getItem("currentRecipeId");
@@ -43,8 +42,17 @@
 
 <style>
   h1 {
-    font-size: 5em;
+    font-size: 1.8rem;
+    color: white;
     text-align: center;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+    color: #c4a312;
+    padding: 0;
+    margin: 0;
   }
   ul {
     margin: 0;
@@ -59,15 +67,13 @@
 {#if currentRecipe !== null}
   <button on:click={listRecipes} class="back" {...bgStyle}>back</button>
 {/if}
-<h1 {...fgStyle}>{title}</h1>
-<div>
-  {#if currentRecipe === null}
-    <ul>
-      {#each teaRecipes as recipe}
-        <TeaRecipe {recipe} on:clickRecipe={enterRecipe} />
-      {/each}
-    </ul>
-  {:else}
-    <BrewSchedule recipe={currentRecipe} />
-  {/if}
-</div>
+<h1>{title}</h1>
+{#if currentRecipe === null}
+  <h2>DEFAULT ITEMS</h2>
+  {#each teaRecipes as recipe}
+    <GalleryItem {recipe} on:clickRecipe={enterRecipe} />
+  {/each}
+  <h2>CUSTOM ITEMS</h2>
+{:else}
+  <BrewSchedule recipe={currentRecipe} />
+{/if}
