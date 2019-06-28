@@ -1,26 +1,41 @@
 {
-    "name": "TeaTime",
+    "name": "Tea Time",
     "short_name": "TeaTime",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#000",
-    "theme_color": "#205123",
+    "background_color": "#333333",
+    "theme_color": "#05702a",
     "description": "A beautiful Tea Timer App",
     "icons": [
         {
-            "src": "favicon.png",
-            "sizes": "128x128",
-            "type": "image/png"
+            "src": "/teatime_test_48.png",
+            "type": "image/png",
+            "sizes": "48x48"
         },
         {
-            "src": "favicon_192.png",
-            "sizes": "192x192",
-            "type": "image/png"
+            "src": "/teatime_test_72.png",
+            "type": "image/png",
+            "sizes": "72x72"
         },
         {
-            "src": "favicon_512.png",
-            "sizes": "512x512",
-            "type": "image/png"
+            "src": "/teatime_test_96.png",
+            "type": "image/png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "/teatime_test_144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "/teatime_test_192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/teatime_test_512.png",
+            "type": "image/png",
+            "sizes": "512x512"
         }
     ]
 }

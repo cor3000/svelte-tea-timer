@@ -4,7 +4,7 @@
 // cache, then increment the CACHE_VERSION value. It will kick off the service worker update
 // flow and the old cache(s) will be purged as part of the activate event handler when the
 // updated service worker is activated.
-var CACHE_VERSION = 6;
+var CACHE_VERSION = 7;
 var CURRENT_CACHES = {
     prefetch: 'prefetch-cache-v' + CACHE_VERSION
 };
@@ -19,10 +19,7 @@ self.addEventListener('install', function (event) {
         'global.css',
         'bundle.css',
         'bundle.js',
-        'Bing.mp3',
-        'favicon.png',
-        'favicon_192.png',
-        'favicon_512.png'
+        'Bing.mp3'
         // This is an image that will be used in pre_fetched.html
         //'https://www.chromium.org/_/rsrc/1302286216006/config/customLogo.gif'
     ];
