@@ -6,7 +6,7 @@
 
   export let recipe;
 
-  const bgStyle = recipeBg(recipe);
+  const colorStyle = recipeBg(recipe);
 
   function clickRecipe(event) {
     dispatch("clickRecipe", recipe);
@@ -25,64 +25,89 @@
     border: 1px solid #979797;
     color: white;
     border-radius: 6px;
-    height: 81px;
-    margin: 8px 0;
-    padding: 9px 50px 9px 34px;
+    padding: 0.9rem 6rem 0.9rem 3.4rem;
     overflow: hidden;
+    line-height: 1.5;
   }
+  /*
+  div.gallery-item-bg {
+    position: absolute;
+    font-size: 10rem;
+    font-weight: 800;
+    opacity: 0.06;
+    top: -0.5em;
+    left: 0;
+    transform: rotate(-10deg);
+  }
+  */
+
   .color {
     height: 100%;
-    width: 6px;
+    width: 0.6rem;
     position: absolute;
     top: 0;
     left: 0;
   }
+  .label1 {
+    font-size: 1.4rem;
+    white-space: nowrap;
+  }
   .label2 {
     font-size: 1.6rem;
+    white-space: nowrap;
   }
   .times {
     font-size: 1.4rem;
     white-space: nowrap;
-    overflow: hidden;
   }
   .times::after {
-    content: "";
-    width: 40%;
-    height: 1.4em;
     position: absolute;
-    background-image: linear-gradient(to right, transparent, #333333);
-    right: 50px;
-    bottom: 9px;
+    display: block;
+    content: "";
+    width: 12rem;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-image: linear-gradient(
+      to right,
+      rgba(51, 51, 51, 0),
+      rgba(51, 51, 51, 1),
+      rgba(51, 51, 51, 1)
+    );
   }
   span {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
   }
   .round-next {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    height: 32px;
-    width: 32px;
+    top: 50%;
+    margin-top: -1.7rem;
+    right: 2rem;
+    height: 3.4rem;
+    width: 3.4rem;
     border: 1px solid #979797;
     border-radius: 50%;
   }
   .round-next::after {
-    content: '';
+    content: "";
     display: block;
     position: absolute;
-    top: 9px;
-    left: 7px;
-    height: 10px;
-    width: 10px;
+    top: 50%;
+    left: 50%;
+    height: 1rem;
+    width: 1rem;
     border: 1px solid #979797;
     border-left: none;
     border-bottom: none;
-    transform: rotate(45deg);
+    transform: translate(-71%, -50%) rotate(45deg);
   }
 </style>
 
 <div class="gallery-item" on:click={clickRecipe}>
-  <div class="color" {...bgStyle} />
+  <!-- <div class="gallery-item-bg" style="color: {recipe.color}">
+     {recipe.label}
+  </div> -->
+  <div class="color" {...colorStyle} />
   <div class="label1">{recipe.label}</div>
   <div class="label2">{recipe.name}</div>
   <div class="times">

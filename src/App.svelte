@@ -46,18 +46,26 @@
     color: white;
     text-align: center;
     padding: 0;
-    margin-bottom: 1rem;
+    margin: 1rem 0;
   }
   h2 {
     font-size: 1.4rem;
     color: #c4a312;
     padding: 0;
-    margin: 0;
+    margin: 0.8em 0;
   }
-  ul {
-    margin: 0;
-    padding: 0;
+  div.gallery {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0.8rem;
   }
+
+  @media (min-width: 640px) {
+    div.gallery {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   button.back {
     color: rgb(201, 185, 168);
     position: absolute;
@@ -70,9 +78,11 @@
 <h1>{title}</h1>
 {#if currentRecipe === null}
   <h2>DEFAULT ITEMS</h2>
-  {#each teaRecipes as recipe}
-    <GalleryItem {recipe} on:clickRecipe={enterRecipe} />
-  {/each}
+  <div class="gallery">
+    {#each teaRecipes as recipe}
+      <GalleryItem {recipe} on:clickRecipe={enterRecipe} />
+    {/each}
+  </div>
   <h2>CUSTOM ITEMS</h2>
 {:else}
   <BrewSchedule recipe={currentRecipe} />
