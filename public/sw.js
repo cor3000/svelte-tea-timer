@@ -13,6 +13,8 @@ self.addEventListener('install', function (event) {
     var now = Date.now();
 
     var urlsToPrefetch = [
+        '/',
+        'index.html',
         'global.css',
         'bundle.css',
         'bundle.js',
