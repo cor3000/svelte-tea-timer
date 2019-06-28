@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#000",
     "theme_color": "#205123",
-    "description": "Tea Timer App",
+    "description": "A beautiful Tea Timer App",
     "icons": [
         {
             "src": "favicon.png",
