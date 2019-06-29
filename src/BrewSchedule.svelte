@@ -5,16 +5,18 @@
 
   export let recipe;
 
-  const formatTime = (duration, showCents) => {
+  const formatTime = duration => {
     duration = Math.abs(duration);
     const minutes = Math.floor(duration / 60);
     const seconds = Math.floor(duration % 60)
       .toString()
       .padStart(2, "0");
-    const cents = Math.floor((duration * 100) % 100)
-      .toString()
-      .padStart(2, "0");
-    return minutes + ":" + seconds + (showCents ? "." + cents : "");
+    return minutes + ":" + seconds;
+  };
+  const formatDecis = duration => {
+    duration = Math.abs(duration);
+    const decis = Math.floor(duration * 10) % 10;
+    return "." + decis;
   };
 
   let currentIndex = 0;
@@ -102,6 +104,7 @@
     color: white;
     border-radius: 50%;
     margin: 0.5rem 0;
+    padding: 0;
   }
   button:focus,
   button:active {
@@ -112,11 +115,17 @@
   }
   button.toggle {
     position: relative;
-    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 6rem;
     height: 20rem;
     width: 20rem;
   }
-  button.toggle > span {
+  button.toggle span.decis {
+    font-size: 0.75em;
+  }
+  button.toggle span.time-offset {
     position: absolute;
     display: block;
     width: 100%;
@@ -151,9 +160,12 @@
     <button on:click={() => offset(-60)}>-1min</button>
   </div>
   <button class="toggle" on:click={toggleTimer}>
-     {formatTime(remainingTime, true)}
+    <span>{formatTime(remainingTime)}</span>
+    <span class="decis">{formatDecis(remainingTime)}</span>
     {#if currentOffset !== 0}
-      <span>({currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)})</span>
+      <span class="time-offset">
+        ({currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)})
+      </span>
     {/if}
   </button>
   <div>
