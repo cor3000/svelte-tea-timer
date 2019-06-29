@@ -1,29 +1,40 @@
 <script>
+  import GalleryItemBox from "./GalleryItemBox.svelte";
+  import { createTimer } from "./timer.js";
   import { onDestroy } from "svelte";
-  import { recipeBg } from "./dynStyles.js";
 
   export let recipe;
 
-  const formatTime = duration => {
-    const minutes = Math.floor(duration / 1000 / 60);
-    const seconds = Math.floor((duration / 1000) % 60);
-    const cents = Math.floor((duration / 10) % 100);
-    return (
-      minutes +
-      ":" +
-      seconds.toString().padStart(2, "0") +
-      "." +
-      cents.toString().padStart(2, "0")
-    );
+  const formatTime = (duration, showCents) => {
+    duration = Math.abs(duration);
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60)
+      .toString()
+      .padStart(2, "0");
+    const cents = Math.floor((duration * 100) % 100)
+      .toString()
+      .padStart(2, "0");
+    return minutes + ":" + seconds + (showCents ? "." + cents : "");
   };
 
   let currentIndex = 0;
-  let running = false;
-  let startTime = null;
-  let timerId = null;
+  let currentOffset = 0;
   let remainingTime = 0;
 
-  const bgStyle = recipeBg(recipe);
+  function tick(remaining) {
+    remainingTime = remaining;
+  }
+
+  function finish() {
+    next();
+    document.getElementById("bing").play();
+    if (Notification && Notification.permission === "granted") {
+      const notification = new Notification("Tea Ready!!");
+      setTimeout(notification.close.bind(notification), 4000);
+    }
+  }
+
+  const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
 
   resetTimer();
 
@@ -35,103 +46,119 @@
     currentIndex = Math.min(currentIndex + 1, recipe.brewTimes.length - 1);
     resetTimer();
   }
-  function finish() {
-    document.getElementById("bing").play();
-    next();
-    if (Notification && Notification.permission === "granted") {
-      const notification = new Notification("Tea Ready!!");
-      setTimeout(notification.close.bind(notification), 4000);
-    }
+
+  function offset(seconds) {
+    currentOffset += seconds;
+    timer.offset(seconds);
+    remainingTime = timer.remaining();
   }
 
   function resetTimer() {
-    startTime = null;
-    running = false;
-    if (timerId !== null) {
-      clearInterval(timerId);
-    }
-    remainingTime = recipe.brewTimes[currentIndex] * 1000;
-    timerId = null;
-  }
-  function updateTimer() {
-    remainingTime =
-      recipe.brewTimes[currentIndex] * 1000 - (Date.now() - startTime);
-    if (remainingTime < 0) {
-      finish();
-    }
+    timer.reset(recipe.brewTimes[currentIndex]);
+    timer.offset(currentOffset);
+    remainingTime = timer.remaining();
   }
 
   function toggleTimer() {
-    if (running) {
+    if (timer.isRunning()) {
       resetTimer();
-      return;
+    } else {
+      timer.start();
     }
-    resetTimer();
-    running = true;
-    startTime = Date.now();
-    timerId = setInterval(updateTimer, recipe.brewTimes[currentIndex], 100);
   }
 
   onDestroy(resetTimer);
 </script>
 
 <style>
-  .teaLabel {
-    color: rgb(201, 185, 168);
-    font-size: 3rem;
-    line-height: 1.5em;
-    vertical-align: middle;
-    border-radius: 0.25em;
-    text-align: center;
-    margin: 0.5rem;
-    padding: 0;
+  .label1 {
+    font-size: 1.4rem;
+    white-space: nowrap;
+  }
+  .label2 {
+    font-size: 1.6rem;
+    white-space: nowrap;
   }
   .current {
     color: rgb(170, 100, 78);
   }
-  div.times,
-  div.nav {
-    margin: 0.5rem;
+  nav {
+    margin: 2rem 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  div.times button {
-    font-size: 3em;
-    margin: 0;
+  nav > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
-  ul {
-    display: inline-block;
-    margin: 0;
-    padding: 1em;
-  }
-  ul > li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
   button {
-    color: rgb(201, 185, 168);
-    font-size: 2em;
+    background-color: #444;
+    border: 1px solid #979797;
+    height: 4rem;
+    width: 4rem;
+    color: white;
+    border-radius: 50%;
+    margin: 0.5rem 0;
+  }
+  button:focus,
+  button:active {
+    outline: none;
+  }
+  button:active {
+    background-color: #666;
+  }
+  button.toggle {
+    position: relative;
+    font-size: 5rem;
+    height: 20rem;
+    width: 20rem;
+  }
+  button.toggle > span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    text-align: center;
+    top: 3rem;
+    font-size: 2rem;
+    color: #666;
   }
 </style>
 
-<div class="teaLabel" {...bgStyle}> {recipe.label} </div>
+<GalleryItemBox color={recipe.color}>
+  <div class="label1">{recipe.label}</div>
+  <div class="label2">{recipe.name}</div>
+</GalleryItemBox>
 <audio src="Bing.mp3" id="bing" />
-<div class="times">
-  <ul>
+<nav>
+  <button on:click={prev}>prev</button>
+  <div style="font-size: 1.5rem">
     {#each recipe.brewTimes as duration, i}
-      <li class={currentIndex === i ? 'current' : ''}>
-         {formatTime(duration * 1000)}
-      </li>
+      <div class={currentIndex === i ? 'current' : ''}>
+         {formatTime(duration)}
+      </div>
     {/each}
-  </ul>
-  <button {...bgStyle} on:click={toggleTimer}>
-     {formatTime(remainingTime)}
+  </div>
+  <button on:click={next}>next</button>
+</nav>
+
+<nav>
+  <div>
+    <button on:click={() => offset(-5)}>-5s</button>
+    <button on:click={() => offset(-10)}>-10s</button>
+    <button on:click={() => offset(-60)}>-1min</button>
+  </div>
+  <button class="toggle" on:click={toggleTimer}>
+     {formatTime(remainingTime, true)}
+    {#if currentOffset !== 0}
+      <span>({currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)})</span>
+    {/if}
   </button>
-</div>
-<div class="nav">
-  <button {...bgStyle} on:click={prev}>prev</button>
-  <button {...bgStyle} on:click={next}>next</button>
-</div>
+  <div>
+    <button on:click={() => offset(5)}>+5s</button>
+    <button on:click={() => offset(10)}>+10s</button>
+    <button on:click={() => offset(60)}>+1min</button>
+  </div>
+</nav>

@@ -1,6 +1,7 @@
 <script>
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
+  import RoundButton from "./RoundButton.svelte";
 
   import { recipes as teaRecipes } from "./defaultRecipes.js";
   import { recipeBg, recipeFg } from "./dynStyles.js";
@@ -66,15 +67,18 @@
     }
   }
 
-  button.back {
-    color: rgb(201, 185, 168);
+  nav {
     position: absolute;
   }
 </style>
 
-{#if currentRecipe !== null}
-  <button on:click={listRecipes} class="back" {...bgStyle}>back</button>
-{/if}
+<nav class="top-left-nav">
+  {#if currentRecipe === null}
+    <RoundButton on:click={() => console.log('menu')} icon="menu" />
+  {:else}
+    <RoundButton on:click={listRecipes} icon="arrow-left" />
+  {/if}
+</nav>
 <h1>{title}</h1>
 {#if currentRecipe === null}
   <h2>DEFAULT ITEMS</h2>
