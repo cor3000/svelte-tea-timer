@@ -23,9 +23,9 @@
     }
   }
 
-  function enterRecipe(event) {
-    currentRecipe = event.detail;
-    saveCurrentRecipe(currentRecipe);
+  function enterRecipe(recipe) {
+    currentRecipe = recipe;
+    saveCurrentRecipe(recipe);
 
     setTimeout(function() {
       if (Notification && Notification.requestPermission) {
@@ -80,7 +80,7 @@
   <h2>DEFAULT ITEMS</h2>
   <div class="gallery">
     {#each teaRecipes as recipe}
-      <GalleryItem {recipe} on:clickRecipe={enterRecipe} />
+      <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
     {/each}
   </div>
   <h2>CUSTOM ITEMS</h2>

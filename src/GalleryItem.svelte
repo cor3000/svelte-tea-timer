@@ -1,16 +1,8 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { recipeBg } from "./dynStyles.js";
-
-  const dispatch = createEventDispatcher();
+  import GalleryItemBox from "./GalleryItemBox.svelte";
+  import RoundButton from "./RoundButton.svelte";
 
   export let recipe;
-
-  const colorStyle = recipeBg(recipe);
-
-  function clickRecipe(event) {
-    dispatch("clickRecipe", recipe);
-  }
 
   function formatTime(duration) {
     const minutes = Math.floor(duration / 60);
@@ -20,34 +12,6 @@
 </script>
 
 <style>
-  div.gallery-item {
-    position: relative;
-    border: 1px solid #979797;
-    color: white;
-    border-radius: 6px;
-    padding: 0.9rem 6rem 0.9rem 3.4rem;
-    overflow: hidden;
-    line-height: 1.5;
-  }
-  /*
-  div.gallery-item-bg {
-    position: absolute;
-    font-size: 10rem;
-    font-weight: 800;
-    opacity: 0.06;
-    top: -0.5em;
-    left: 0;
-    transform: rotate(-10deg);
-  }
-  */
-
-  .color {
-    height: 100%;
-    width: 0.6rem;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
   .label1 {
     font-size: 1.4rem;
     white-space: nowrap;
@@ -78,36 +42,18 @@
   span {
     margin-right: 0.3rem;
   }
-  .round-next {
+  .button-pos {
     position: absolute;
-    top: 50%;
-    margin-top: -1.7rem;
     right: 2rem;
-    height: 3.4rem;
-    width: 3.4rem;
-    border: 1px solid #979797;
-    border-radius: 50%;
-  }
-  .round-next::after {
-    content: "";
-    display: block;
-    position: absolute;
     top: 50%;
-    left: 50%;
-    height: 1rem;
-    width: 1rem;
-    border: 1px solid #979797;
-    border-left: none;
-    border-bottom: none;
-    transform: translate(-71%, -50%) rotate(45deg);
+    transform: translateY(-50%);
   }
 </style>
 
-<div class="gallery-item" on:click={clickRecipe}>
-  <!-- <div class="gallery-item-bg" style="color: {recipe.color}">
-     {recipe.label}
-  </div> -->
-  <div class="color" {...colorStyle} />
+<GalleryItemBox
+  on:click
+  color={recipe.color}
+  extraProps={{ style: 'cursor:pointer' }}>
   <div class="label1">{recipe.label}</div>
   <div class="label2">{recipe.name}</div>
   <div class="times">
@@ -115,5 +61,7 @@
       <span> {formatTime(duration)} </span>
     {/each}
   </div>
-  <div class="round-next" />
-</div>
+  <div class="button-pos">
+    <RoundButton icon="arrow-right" />
+  </div>
+</GalleryItemBox>
