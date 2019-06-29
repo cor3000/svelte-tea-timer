@@ -117,10 +117,14 @@
     position: relative;
     display: flex;
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
     font-size: 6rem;
     height: 20rem;
     width: 20rem;
+  }
+  button.toggle > span {
+    display: flex;
+    align-items: baseline;
   }
   button.toggle span.decis {
     font-size: 0.75em;
@@ -160,8 +164,10 @@
     <button on:click={() => offset(-60)}>-1min</button>
   </div>
   <button class="toggle" on:click={toggleTimer}>
-    <span>{formatTime(remainingTime)}</span>
-    <span class="decis">{formatDecis(remainingTime)}</span>
+    <span>
+      <span>{formatTime(remainingTime)}</span>
+      <span class="decis">{formatDecis(remainingTime)}</span>
+    </span>
     {#if currentOffset !== 0}
       <span class="time-offset">
         ({currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)})
