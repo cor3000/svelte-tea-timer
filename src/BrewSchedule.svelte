@@ -4,6 +4,7 @@
   import { onDestroy } from "svelte";
 
   export let recipe;
+  export let config;
 
   const formatTime = duration => {
     duration = Math.abs(duration);
@@ -29,10 +30,14 @@
 
   function finish() {
     next();
-    document.getElementById("bing").play();
-    if (Notification && Notification.permission === "granted") {
-      const notification = new Notification("Tea Ready!!");
-      setTimeout(notification.close.bind(notification), 4000);
+    if (config.sound === true) {
+      document.getElementById("bing").play();
+    }
+    if (config.notification === true) {
+      if (Notification && Notification.permission === "granted") {
+        const notification = new Notification("Tea Ready!!");
+        setTimeout(notification.close.bind(notification), 4000);
+      }
     }
   }
 

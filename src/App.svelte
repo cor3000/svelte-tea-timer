@@ -3,13 +3,53 @@
   import BrewSchedule from "./BrewSchedule.svelte";
   import RoundButton from "./RoundButton.svelte";
 
-  import { recipes as teaRecipes } from "./defaultRecipes.js";
+  import { recipes } from "./defaultRecipes.js";
   import { recipeBg, recipeFg } from "./dynStyles.js";
 
   export let title;
 
+  let teaRecipes = JSON.parse(JSON.stringify(recipes));
+
   let currentRecipe = loadCurrentRecipe(teaRecipes);
-  $: bgStyle = recipeBg(currentRecipe);
+  let config = {
+    menu: false,
+    sound: true,
+    notifications: true
+  };
+
+  function toggleMenu() {
+    config.menu = !config.menu;
+  }
+  function toggleSound() {
+    config.sound = !config.sound;
+  }
+  function toggleNotifications() {
+    config.notifications = !config.notifications;
+  }
+
+  function loadRecipes() {}
+  function saveRecipes() {}
+  function importRecipes(event) {
+    const blob = event.target.files[0].slice(0);
+    const fr = new FileReader();
+    fr.addEventListener("loadend", event => {
+      const json = event.srcElement.result;
+      const importedRecipes = JSON.parse(json);
+      teaRecipes = importedRecipes;
+    });
+    fr.readAsText(blob);
+  }
+  function exportRecipes() {
+    var dataStr =
+      "data:text/json;charset=utf-8," +
+      encodeURIComponent(JSON.stringify(teaRecipes));
+    var downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "teaTimeRecipes.json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
 
   function loadCurrentRecipe(recipes) {
     const recipeId = localStorage.getItem("currentRecipeId");
@@ -28,11 +68,13 @@
     currentRecipe = recipe;
     saveCurrentRecipe(recipe);
 
-    setTimeout(function() {
-      if (Notification && Notification.requestPermission) {
-        Notification.requestPermission();
-      }
-    }, 0);
+    if (config.notifications) {
+      setTimeout(function() {
+        if (Notification && Notification.requestPermission) {
+          Notification.requestPermission();
+        }
+      }, 0);
+    }
   }
 
   function listRecipes() {
@@ -70,24 +112,52 @@
   nav {
     position: absolute;
   }
+  .config-menu {
+    margin-top: 5rem;
+  }
+  .config-menu > * {
+    display: block;
+    font-size: 1.4rem;
+    color: #979797;
+    margin: 1em 0;
+  }
 </style>
 
 <nav class="top-left-nav">
   {#if currentRecipe === null}
-    <RoundButton on:click={() => console.log('menu')} icon="menu" />
+    <RoundButton on:click={toggleMenu} icon="menu" />
   {:else}
     <RoundButton on:click={listRecipes} icon="arrow-left" />
   {/if}
 </nav>
-<h1>{title}</h1>
-{#if currentRecipe === null}
-  <h2>DEFAULT ITEMS</h2>
-  <div class="gallery">
-    {#each teaRecipes as recipe}
-      <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
-    {/each}
+{#if config.menu}
+  <h1>Tea Time - Configuration</h1>
+  <div class="config-menu">
+    <label>
+      <input type="checkbox" bind:checked={config.sound} />
+      Sound
+    </label>
+    <label>
+      <input type="checkbox" bind:checked={config.notifications} />
+      Notifications
+    </label>
+    <button on:click={exportRecipes}>Export Recipes</button>
+    <div>
+      Import Recipes
+      <input type="file" on:change={importRecipes} />
+    </div>
   </div>
-  <h2>CUSTOM ITEMS</h2>
 {:else}
-  <BrewSchedule recipe={currentRecipe} />
+  <h1>{title}</h1>
+  {#if currentRecipe === null}
+    <h2>DEFAULT ITEMS</h2>
+    <div class="gallery">
+      {#each teaRecipes as recipe}
+        <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
+      {/each}
+    </div>
+    <h2>CUSTOM ITEMS</h2>
+  {:else}
+    <BrewSchedule recipe={currentRecipe} {config} />
+  {/if}
 {/if}

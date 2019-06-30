@@ -29,11 +29,11 @@
     border-left: none;
     border-right: none;
   }
+
   div.menu::before {
     border-top: 1px solid #979797;
     transform: translate(-50%, -0.5px);
   }
-
 
   div.arrow-right::after,
   div.arrow-left::after {
