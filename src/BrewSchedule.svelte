@@ -164,9 +164,9 @@
 
 <nav>
   <div>
-    <button on:click={() => offset(-5)}>-5s</button>
+    <button style="margin-left: 1rem;" on:click={() => offset(-5)}>-5s</button>
     <button on:click={() => offset(-10)}>-10s</button>
-    <button on:click={() => offset(-60)}>-1min</button>
+    <button style="margin-left: 1rem;" on:click={() => offset(-60)}>-1min</button>
   </div>
   <button class="toggle" on:click={toggleTimer}>
     <span>
@@ -181,7 +181,7 @@
   </button>
   <div>
     <button on:click={() => offset(5)}>+5s</button>
-    <button on:click={() => offset(10)}>+10s</button>
+    <button style="margin-left: 1rem;" on:click={() => offset(10)}>+10s</button>
     <button on:click={() => offset(60)}>+1min</button>
   </div>
 </nav>
