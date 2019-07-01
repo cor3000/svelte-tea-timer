@@ -167,7 +167,6 @@
     </div>
     <div>
       <button on:click={resetRecipes}>Reset Recipes</button>
-      <input type="file" on:change={importRecipes} />
     </div>
   </div>
 {:else}
