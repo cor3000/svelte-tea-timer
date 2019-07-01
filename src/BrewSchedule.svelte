@@ -33,7 +33,7 @@
     if (config.sound === true) {
       document.getElementById("bing").play();
     }
-    if (config.notification === true) {
+    if (config.notifications === true) {
       if (Notification && Notification.permission === "granted") {
         const notification = new Notification("Tea Ready!!");
         setTimeout(notification.close.bind(notification), 4000);

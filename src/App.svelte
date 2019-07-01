@@ -14,17 +14,27 @@
   let config = {
     menu: false,
     sound: true,
-    notifications: true
+    notifications: Notification && Notification.permission === "granted"
   };
 
   function toggleMenu() {
     config.menu = !config.menu;
   }
-  function toggleSound() {
-    config.sound = !config.sound;
-  }
+
   function toggleNotifications() {
-    config.notifications = !config.notifications;
+    if (config.notifications) {
+      setTimeout(function() {
+        if (Notification && Notification.requestPermission) {
+          Notification.requestPermission()
+            .then(result => {
+                console.log(result);
+                if(result !== "granted") {
+                    config.notifications = false;
+                }
+            });
+        }
+      }, 0);
+    }
   }
 
   function loadRecipes() {}
@@ -67,14 +77,6 @@
   function enterRecipe(recipe) {
     currentRecipe = recipe;
     saveCurrentRecipe(recipe);
-
-    if (config.notifications) {
-      setTimeout(function() {
-        if (Notification && Notification.requestPermission) {
-          Notification.requestPermission();
-        }
-      }, 0);
-    }
   }
 
   function listRecipes() {
@@ -138,7 +140,7 @@
       Sound
     </label>
     <label>
-      <input type="checkbox" bind:checked={config.notifications} />
+      <input type="checkbox" bind:checked={config.notifications} on:change={toggleNotifications}/>
       Notifications
     </label>
     <button on:click={exportRecipes}>Export Recipes</button>
