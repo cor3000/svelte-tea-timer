@@ -3,12 +3,12 @@
   import BrewSchedule from "./BrewSchedule.svelte";
   import RoundButton from "./RoundButton.svelte";
 
-  import { recipes } from "./defaultRecipes.js";
+  import { recipes as defaultRecipes } from "./defaultRecipes.js";
   import { recipeBg, recipeFg } from "./dynStyles.js";
 
   export let title;
 
-  let teaRecipes = JSON.parse(JSON.stringify(recipes));
+  let teaRecipes = loadRecipes(defaultRecipes);
 
   let currentRecipe = loadCurrentRecipe(teaRecipes);
   let config = {
@@ -25,20 +25,31 @@
     if (config.notifications) {
       setTimeout(function() {
         if (Notification && Notification.requestPermission) {
-          Notification.requestPermission()
-            .then(result => {
-                console.log(result);
-                if(result !== "granted") {
-                    config.notifications = false;
-                }
-            });
+          Notification.requestPermission().then(result => {
+            console.log(result);
+            if (result !== "granted") {
+              config.notifications = false;
+            }
+          });
         }
       }, 0);
     }
   }
 
-  function loadRecipes() {}
-  function saveRecipes() {}
+  function loadRecipes(defaultRecipes) {
+    const storedRecipes = localStorage.getItem("teaRecipes");
+    return JSON.parse(storedRecipes || JSON.stringify(defaultRecipes));
+  }
+  function resetRecipes(teaRecipes) {
+    saveRecipes(null);
+  }
+  function saveRecipes(teaRecipes) {
+    if (teaRecipes === null) {
+      localStorage.removeItem("teaRecipes");
+    } else {
+      localStorage.setItem("teaRecipes", JSON.stringify(teaRecipes));
+    }
+  }
   function importRecipes(event) {
     const blob = event.target.files[0].slice(0);
     const fr = new FileReader();
@@ -46,13 +57,14 @@
       const json = event.srcElement.result;
       const importedRecipes = JSON.parse(json);
       teaRecipes = importedRecipes;
+      saveRecipes(teaRecipes);
     });
     fr.readAsText(blob);
   }
   function exportRecipes() {
     var dataStr =
       "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(teaRecipes));
+      encodeURIComponent(JSON.stringify(teaRecipes, name, 2));
     var downloadAnchorNode = document.createElement("a");
     downloadAnchorNode.setAttribute("href", dataStr);
     downloadAnchorNode.setAttribute("download", "teaTimeRecipes.json");
@@ -67,7 +79,7 @@
   }
 
   function saveCurrentRecipe(recipe) {
-    if (recipe == null) {
+    if (recipe === null) {
       localStorage.removeItem("currentRecipeId");
     } else {
       localStorage.setItem("currentRecipeId", recipe.id);
@@ -127,7 +139,9 @@
 
 <nav class="top-left-nav">
   {#if currentRecipe === null}
-    <RoundButton on:click={toggleMenu} icon="menu" />
+    <RoundButton
+      on:click={toggleMenu}
+      icon={config.menu ? 'arrow-left' : 'menu'} />
   {:else}
     <RoundButton on:click={listRecipes} icon="arrow-left" />
   {/if}
@@ -140,12 +154,19 @@
       Sound
     </label>
     <label>
-      <input type="checkbox" bind:checked={config.notifications} on:change={toggleNotifications}/>
+      <input
+        type="checkbox"
+        bind:checked={config.notifications}
+        on:change={toggleNotifications} />
       Notifications
     </label>
     <button on:click={exportRecipes}>Export Recipes</button>
     <div>
       Import Recipes
+      <input type="file" on:change={importRecipes} />
+    </div>
+    <div>
+      <button on:click={resetRecipes}>Reset Recipes</button>
       <input type="file" on:change={importRecipes} />
     </div>
   </div>

@@ -1,14 +1,9 @@
 <script>
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import RoundButton from "./RoundButton.svelte";
+  import { formatTime } from "./format.js";
 
   export let recipe;
-
-  function formatTime(duration) {
-    const minutes = Math.floor(duration / 60);
-    const seconds = duration % 60;
-    return minutes + ":" + seconds.toString().padStart(2, "0");
-  }
 </script>
 
 <style>

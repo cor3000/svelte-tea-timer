@@ -1,24 +1,11 @@
 <script>
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
+  import { formatTime, formatDecis } from "./format.js";
   import { onDestroy } from "svelte";
 
   export let recipe;
   export let config;
-
-  const formatTime = duration => {
-    duration = Math.abs(duration);
-    const minutes = Math.floor(duration / 60);
-    const seconds = Math.floor(duration % 60)
-      .toString()
-      .padStart(2, "0");
-    return minutes + ":" + seconds;
-  };
-  const formatDecis = duration => {
-    duration = Math.abs(duration);
-    const decis = Math.floor(duration * 10) % 10;
-    return "." + decis;
-  };
 
   let currentIndex = 0;
   let currentOffset = 0;
@@ -100,6 +87,17 @@
     flex-direction: column;
     justify-content: space-between;
   }
+  nav > span > span {
+    margin: 0 0.2rem;
+  }
+  nav > span {
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  nav > button {
+    flex: 0 0 auto;
+  }
 
   button {
     background-color: #444;
@@ -152,13 +150,13 @@
 <audio src="Bing.mp3" id="bing" />
 <nav>
   <button on:click={prev}>prev</button>
-  <div style="font-size: 1.5rem">
+  <span style="font-size: 1.5rem">
     {#each recipe.brewTimes as duration, i}
-      <div class={currentIndex === i ? 'current' : ''}>
+      <span class={currentIndex === i ? 'current' : ''}>
          {formatTime(duration)}
-      </div>
+      </span>
     {/each}
-  </div>
+  </span>
   <button on:click={next}>next</button>
 </nav>
 
@@ -166,7 +164,9 @@
   <div>
     <button style="margin-left: 1rem;" on:click={() => offset(-5)}>-5s</button>
     <button on:click={() => offset(-10)}>-10s</button>
-    <button style="margin-left: 1rem;" on:click={() => offset(-60)}>-1min</button>
+    <button style="margin-left: 1rem;" on:click={() => offset(-60)}>
+      -1min
+    </button>
   </div>
   <button class="toggle" on:click={toggleTimer}>
     <span>
