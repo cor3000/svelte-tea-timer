@@ -14,7 +14,8 @@
   let config = {
     menu: false,
     sound: true,
-    notifications: Notification && Notification.permission === "granted"
+    notifications:
+      window.Notification && window.Notification.permission === "granted"
   };
 
   function toggleMenu() {
@@ -24,8 +25,8 @@
   function toggleNotifications() {
     if (config.notifications) {
       setTimeout(function() {
-        if (Notification && Notification.requestPermission) {
-          Notification.requestPermission().then(result => {
+        if (window.Notification && window.Notification.requestPermission) {
+          window.Notification.requestPermission().then(result => {
             console.log(result);
             if (result !== "granted") {
               config.notifications = false;
@@ -153,14 +154,18 @@
       <input type="checkbox" bind:checked={config.sound} />
       Sound
     </label>
-    <label>
-      <input
-        type="checkbox"
-        bind:checked={config.notifications}
-        on:change={toggleNotifications} />
-      Notifications
-    </label>
-    <button on:click={exportRecipes}>Export Recipes</button>
+    {#if window.Notification}
+      <label>
+        <input
+          type="checkbox"
+          bind:checked={config.notifications}
+          on:change={toggleNotifications} />
+        Notifications
+      </label>
+    {/if}
+    <div>
+      <button on:click={exportRecipes}>Export Recipes</button>
+    </div>
     <div>
       Import Recipes
       <input type="file" on:change={importRecipes} />
