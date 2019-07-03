@@ -1,7 +1,7 @@
 <script>
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
-  import { formatTime, formatDecis } from "./format.js";
+  import { formatTime } from "./format.js";
   import { onDestroy } from "svelte";
 
   export let recipe;
@@ -10,9 +10,13 @@
   let currentIndex = 0;
   let currentOffset = 0;
   let remainingTime = 0;
+  let running = false;
+
+  const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
 
   function tick(remaining) {
     remainingTime = remaining;
+    running = timer.isRunning;
   }
 
   function finish() {
@@ -27,8 +31,6 @@
       }
     }
   }
-
-  const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
 
   resetTimer();
 
@@ -51,6 +53,7 @@
     timer.reset(recipe.brewTimes[currentIndex]);
     timer.offset(currentOffset);
     remainingTime = timer.remaining();
+    running = timer.isRunning();
   }
 
   function toggleTimer() {
@@ -73,41 +76,13 @@
     font-size: 1.6rem;
     white-space: nowrap;
   }
-  .current {
-    color: rgb(170, 100, 78);
-  }
-  nav {
-    margin: 2rem 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  nav > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  nav > span > span {
-    margin: 0 0.2rem;
-  }
-  nav > span {
-    text-align: center;
-    margin: 0 1rem;
-  }
-
-  nav > button {
-    flex: 0 0 auto;
-  }
-
   button {
-    background-color: #444;
-    border: 1px solid #979797;
-    height: 4rem;
-    width: 4rem;
+    font-weight: lighter;
+    font-size: 1.4rem;
     color: white;
+    border: none;
     border-radius: 50%;
-    margin: 0.5rem 0;
-    padding: 0;
+    background-color: #4a4a4a;
   }
   button:focus,
   button:active {
@@ -116,30 +91,92 @@
   button:active {
     background-color: #666;
   }
-  button.toggle {
-    position: relative;
+  nav.times {
+    margin: 2rem 0;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+  }
+  nav.times ul {
+    font-size: 1.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #979797;
+    text-align: center;
+  }
+  nav.times li {
+    display: inline-block;
+    margin: 0.3rem 0.5rem;
+  }
+  nav.times li.current {
+    font-weight: bold;
+    color: white;
+  }
+  nav.times button {
+    font-weight: normal;
+    font-size: 1.8rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  section > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  section button {
+    width: 4.5rem;
+    height: 4.5rem;
+    text-align: center;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  section > div.timer {
+    width: 17rem;
+    height: 17rem;
+    background-color: black;
+    border-radius: 50%;
+    padding: 0.5rem;
+    font-weight: lighter;
+  }
+  section > div.timer > div {
+    position: relative;
+    width: 16rem;
+    height: 16rem;
+    background-color: #333333;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  span.time {
+    flex: 1;
+    display: flex;
     align-items: center;
     font-size: 6rem;
-    height: 20rem;
-    width: 20rem;
   }
-  button.toggle > span {
-    display: flex;
-    align-items: baseline;
-  }
-  button.toggle span.decis {
-    font-size: 0.75em;
-  }
-  button.toggle span.time-offset {
+  span.time-offset {
     position: absolute;
-    display: block;
-    width: 100%;
+    background-color: #4a4a4a;
+    top: 11.5rem;
+    font-size: 1.4rem;
+    padding: 0.4rem 1.5rem;
+    border-radius: 1.1rem;
+  }
+  button.toggle {
+    width: 10rem;
+    height: 10rem;
     text-align: center;
-    top: 3rem;
     font-size: 2rem;
-    color: #666;
+  }
+  footer {
+    margin-top: 1rem;
+    text-align: center;
   }
 </style>
 
@@ -148,40 +185,42 @@
   <div class="label2">{recipe.name}</div>
 </GalleryItemBox>
 <audio src="Bing.mp3" id="bing" />
-<nav>
-  <button on:click={prev}>prev</button>
-  <span style="font-size: 1.5rem">
+<nav class="times">
+  <button on:click={prev}>Prev</button>
+  <ul>
     {#each recipe.brewTimes as duration, i}
-      <span class={currentIndex === i ? 'current' : ''}>
-         {formatTime(duration)}
-      </span>
+      <li class:current={currentIndex === i}> {formatTime(duration)} </li>
     {/each}
-  </span>
-  <button on:click={next}>next</button>
+  </ul>
+  <button on:click={next}>Next</button>
 </nav>
 
-<nav>
+<section>
   <div>
-    <button style="margin-left: 1rem;" on:click={() => offset(-5)}>-5s</button>
+    <button style="margin-left: 2rem;" on:click={() => offset(-5)}>-5s</button>
     <button on:click={() => offset(-10)}>-10s</button>
-    <button style="margin-left: 1rem;" on:click={() => offset(-60)}>
+    <button style="margin-left: 2rem;" on:click={() => offset(-60)}>
       -1min
     </button>
   </div>
-  <button class="toggle" on:click={toggleTimer}>
-    <span>
-      <span>{formatTime(remainingTime)}</span>
-      <span class="decis">{formatDecis(remainingTime)}</span>
-    </span>
-    {#if currentOffset !== 0}
-      <span class="time-offset">
-        ({currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)})
-      </span>
-    {/if}
-  </button>
+  <div class="timer" on:click={toggleTimer}>
+    <div>
+      <span class="time">{formatTime(remainingTime)}</span>
+      {#if currentOffset !== 0}
+        <span class="time-offset">
+           {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
+        </span>
+      {/if}
+    </div>
+  </div>
   <div>
     <button on:click={() => offset(5)}>+5s</button>
-    <button style="margin-left: 1rem;" on:click={() => offset(10)}>+10s</button>
+    <button style="margin-left: 2rem;" on:click={() => offset(10)}>+10s</button>
     <button on:click={() => offset(60)}>+1min</button>
   </div>
-</nav>
+</section>
+<footer>
+  <button class="toggle" on:click={toggleTimer}>
+     {running ? 'RESET' : 'GO'}
+  </button>
+</footer>

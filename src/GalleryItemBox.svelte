@@ -8,7 +8,7 @@
     position: relative;
     border: 1px solid #979797;
     color: white;
-    border-radius: 6px;
+    border-radius: 0.5rem;
     padding: 0.9rem 0.9em 0.9rem 3.4rem;
     overflow: hidden;
     line-height: 1.5;
