@@ -11,12 +11,25 @@
   let currentOffset = 0;
   let remainingTime = 0;
   let running = false;
+  $: progressGradient = calculateProgressGradient(
+    recipe.brewTimes[currentIndex] + currentOffset,
+    remainingTime,
+    recipe.color
+  );
 
   const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
 
+  function calculateProgressGradient(total, remaining, color) {
+    let progress =
+      total <= 0 ? 0 : Math.floor((1 - remainingTime / total) * 100 * 5) / 5;
+
+    let colorStops = `${color} ${progress}%, #000 ${progress}%`;
+    return `background-image: linear-gradient(${colorStops});`;
+    //`background-image: conic-gradient(${colorStops});`*/;
+  }
+
   function tick(remaining) {
-    remainingTime = remaining;
-    running = timer.isRunning;
+    updateTimerVars(timer);
   }
 
   function finish() {
@@ -52,6 +65,10 @@
   function resetTimer() {
     timer.reset(recipe.brewTimes[currentIndex]);
     timer.offset(currentOffset);
+    updateTimerVars(timer);
+  }
+
+  function updateTimerVars(timer) {
     remainingTime = timer.remaining();
     running = timer.isRunning();
   }
@@ -204,7 +221,7 @@
       -1min
     </button>
   </div>
-  <div class="timer" on:click={toggleTimer}>
+  <div class="timer" on:click={toggleTimer} style={progressGradient}>
     <div>
       <span class="time">{formatTime(remainingTime)}</span>
       {#if currentOffset !== 0}

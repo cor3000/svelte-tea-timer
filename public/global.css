@@ -23,8 +23,14 @@ body {
 * {
 	box-sizing: border-box;
 	user-select: none;
+	-webkit-user-select: none;
 }
 
 input, textarea {
 	user-select: all;
+	-webkit-user-select: all;
+}
+
+button {
+	touch-action: manipulation;
 }
