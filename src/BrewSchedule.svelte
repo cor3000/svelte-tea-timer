@@ -173,6 +173,7 @@
     height: 10rem;
     text-align: center;
     font-size: 2rem;
+    font-weight: normal;
   }
   footer {
     margin-top: 1rem;
