@@ -8,9 +8,16 @@
     "description": "A beautiful Tea Timer App",
     "icons": [
         {
+            "src": "/img/teatime_5.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        },
+        {
             "src": "/img/teatime_4.png",
             "type": "image/png",
-            "sizes": "48x48 72x72 96x96 144x144 192x192 512x512"
+            "sizes": "512x512",
+            "purpose": "any"
         }
     ]
 }
