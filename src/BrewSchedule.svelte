@@ -23,9 +23,8 @@
     let progress =
       total <= 0 ? 0 : Math.floor((1 - remainingTime / total) * 100 * 5) / 5;
 
-    let colorStops = `${color} ${progress}%, #000 ${progress}%`;
-    return `background-image: linear-gradient(${colorStops});`;
-    //`background-image: conic-gradient(${colorStops});`*/;
+    let colorStops = `${color}, ${color} ${progress * 1.05 - 5}%, #000 ${progress * 1.05}%`;
+    return `background-image: linear-gradient(${colorStops});` + `background-image: conic-gradient(${colorStops});`;
   }
 
   function tick(remaining) {
