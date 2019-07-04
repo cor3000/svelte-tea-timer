@@ -21,9 +21,9 @@
 
   function calculateProgressGradient(total, remaining, color) {
     let progress =
-      total <= 0 ? 0 : Math.floor((1 - remainingTime / total) * 100 * 5) / 5;
+      total <= 0 ? 0 : Math.floor((remainingTime / total) * 100 * 5) / 5;
 
-    let colorStops = `${color}, ${color} ${progress * 1.05 - 5}%, #000 ${progress * 1.05}%`;
+    let colorStops = `${color}, ${color} ${progress * 1.01 - 1}%, #000 ${progress * 1.01}%`;
     return `background-image: linear-gradient(${colorStops});` + `background-image: conic-gradient(${colorStops});`;
   }
 
