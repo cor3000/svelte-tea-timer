@@ -84,6 +84,23 @@
 </script>
 
 <style>
+  @media (orientation: landscape) {
+    div.timer-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    div.timer-control > * {
+      margin: 0 2rem;
+    }
+    section > :nth-child(2) {
+      order: 3;
+      margin-left: 3rem;
+    }
+    section button {
+      margin: 0.5rem!important;
+    }
+  }
   .label1 {
     font-size: 1.4rem;
     white-space: nowrap;
@@ -211,33 +228,34 @@
   </ul>
   <button on:click={next}>Next</button>
 </nav>
-
-<section>
-  <div>
-    <button style="margin-left: 2rem;" on:click={() => offset(-5)}>-5s</button>
-    <button on:click={() => offset(-10)}>-10s</button>
-    <button style="margin-left: 2rem;" on:click={() => offset(-60)}>
-      -1min
-    </button>
-  </div>
-  <div class="timer" on:click={toggleTimer} style={progressGradient}>
+<div class="timer-control">
+  <section>
     <div>
-      <span class="time">{formatTime(remainingTime)}</span>
-      {#if currentOffset !== 0}
-        <span class="time-offset">
-           {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
-        </span>
-      {/if}
+      <button style="margin-left: 2rem;" on:click={() => offset(-5)}>-5s</button>
+      <button on:click={() => offset(-10)}>-10s</button>
+      <button style="margin-left: 2rem;" on:click={() => offset(-60)}>
+        -1min
+      </button>
     </div>
-  </div>
-  <div>
-    <button on:click={() => offset(5)}>+5s</button>
-    <button style="margin-left: 2rem;" on:click={() => offset(10)}>+10s</button>
-    <button on:click={() => offset(60)}>+1min</button>
-  </div>
-</section>
-<footer>
-  <button class="toggle" on:click={toggleTimer}>
-     {running ? 'RESET' : 'GO'}
-  </button>
-</footer>
+    <div class="timer" on:click={toggleTimer} style={progressGradient}>
+      <div>
+        <span class="time">{formatTime(remainingTime)}</span>
+        {#if currentOffset !== 0}
+          <span class="time-offset">
+            {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
+          </span>
+        {/if}
+      </div>
+    </div>
+    <div>
+      <button on:click={() => offset(5)}>+5s</button>
+      <button style="margin-left: 2rem;" on:click={() => offset(10)}>+10s</button>
+      <button on:click={() => offset(60)}>+1min</button>
+    </div>
+  </section>
+  <footer>
+    <button class="toggle" on:click={toggleTimer}>
+      {running ? 'RESET' : 'GO'}
+    </button>
+  </footer>
+</div>
