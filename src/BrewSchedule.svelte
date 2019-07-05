@@ -1,7 +1,7 @@
 <script>
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
-  import { formatTime } from "./format.js";
+  import { formatTime, formatDecis } from "./format.js";
   import { onDestroy } from "svelte";
 
   export let recipe;
@@ -23,8 +23,12 @@
     let progress =
       total <= 0 ? 0 : Math.floor((remainingTime / total) * 100 * 5) / 5;
 
-    let colorStops = `${color}, ${color} ${progress * 1.01 - 1}%, #000 ${progress * 1.01}%`;
-    return `background-image: linear-gradient(${colorStops});` + `background-image: conic-gradient(${colorStops});`;
+    let colorStops = `${color}, ${color} ${progress * 1.01 -
+      1}%, #000 ${progress * 1.01}%`;
+    return (
+      `background-image: linear-gradient(${colorStops});` +
+      `background-image: conic-gradient(${colorStops});`
+    );
   }
 
   function tick(remaining) {
@@ -98,7 +102,7 @@
       margin-left: 3rem;
     }
     section button {
-      margin: 0.5rem!important;
+      margin: 0.5rem !important;
     }
   }
   .label1 {
@@ -193,7 +197,15 @@
     align-items: center;
     font-size: 6rem;
   }
-  span.time-offset {
+  span.time > span {
+    display: flex;
+    align-items: baseline;
+  }
+  span.time .decis {
+    font-size: 2rem;
+  }
+
+  span.timer-offset {
     position: absolute;
     background-color: #4a4a4a;
     top: 11.5rem;
@@ -207,6 +219,9 @@
     text-align: center;
     font-size: 2rem;
     font-weight: normal;
+  }
+  button.toggle.reset {
+    color: #979797;
   }
   footer {
     margin-top: 1rem;
@@ -231,7 +246,9 @@
 <div class="timer-control">
   <section>
     <div>
-      <button style="margin-left: 2rem;" on:click={() => offset(-5)}>-5s</button>
+      <button style="margin-left: 2rem;" on:click={() => offset(-5)}>
+        -5s
+      </button>
       <button on:click={() => offset(-10)}>-10s</button>
       <button style="margin-left: 2rem;" on:click={() => offset(-60)}>
         -1min
@@ -239,23 +256,30 @@
     </div>
     <div class="timer" on:click={toggleTimer} style={progressGradient}>
       <div>
-        <span class="time">{formatTime(remainingTime)}</span>
+        <span class="time">
+          <span>
+            <span>{formatTime(remainingTime)}</span>
+            <span class="decis">{formatDecis(remainingTime)}</span>
+          </span>
+        </span>
         {#if currentOffset !== 0}
-          <span class="time-offset">
-            {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
+          <span class="timer-offset">
+             {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
           </span>
         {/if}
       </div>
     </div>
     <div>
       <button on:click={() => offset(5)}>+5s</button>
-      <button style="margin-left: 2rem;" on:click={() => offset(10)}>+10s</button>
+      <button style="margin-left: 2rem;" on:click={() => offset(10)}>
+        +10s
+      </button>
       <button on:click={() => offset(60)}>+1min</button>
     </div>
   </section>
   <footer>
-    <button class="toggle" on:click={toggleTimer}>
-      {running ? 'RESET' : 'GO'}
+    <button class="toggle" class:reset={running} on:click={toggleTimer}>
+       {running ? 'RESET' : 'GO'}
     </button>
   </footer>
 </div>
