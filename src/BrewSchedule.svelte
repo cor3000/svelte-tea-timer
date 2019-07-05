@@ -2,6 +2,7 @@
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
+  import { hsl2hex, hex2hsl } from "./colors.js";
   import { onDestroy } from "svelte";
 
   export let recipe;
@@ -23,8 +24,14 @@
     let progress =
       total <= 0 ? 0 : Math.floor((remainingTime / total) * 100 * 5) / 5;
 
-    let colorStops = `${color}, ${color} ${progress * 1.01 -
-      1}%, #000 ${progress * 1.01}%`;
+    if (running) {
+      const hsl = hex2hsl(color);
+      hsl[2] += (Math.sin(total * progress * 0.04) + 1) * 5;
+      color = hsl2hex(hsl);
+    }
+
+    let colorStops = `${color}, ${color} ${progress * 1.005 -
+      0.5}%, #000 ${progress * 1.005}%`;
     return (
       `background-image: linear-gradient(${colorStops});` +
       `background-image: conic-gradient(${colorStops});`
