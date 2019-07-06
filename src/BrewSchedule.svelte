@@ -95,23 +95,6 @@
 </script>
 
 <style>
-  @media (orientation: landscape) {
-    div.timer-control {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    div.timer-control > * {
-      margin: 0 2rem;
-    }
-    section > :nth-child(2) {
-      order: 3;
-      margin-left: 3rem;
-    }
-    section button {
-      margin: 0.5rem !important;
-    }
-  }
   .label1 {
     font-size: 1.4rem;
     white-space: nowrap;
@@ -136,7 +119,7 @@
     background-color: #666;
   }
   nav.times {
-    margin: 2rem 0;
+    margin: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -180,7 +163,7 @@
     padding: 0;
     margin: 1rem 0;
   }
-  section > div.timer {
+  section div.timer {
     width: 17rem;
     height: 17rem;
     background-color: black;
@@ -188,7 +171,7 @@
     padding: 0.5rem;
     font-weight: lighter;
   }
-  section > div.timer > div {
+  section div.timer > div {
     position: relative;
     width: 16rem;
     height: 16rem;
@@ -202,14 +185,14 @@
     flex: 1;
     display: flex;
     align-items: center;
-    font-size: 6rem;
+    font-size: 5.2rem;
   }
   span.time > span {
     display: flex;
     align-items: baseline;
   }
   span.time .decis {
-    font-size: 2rem;
+    font-size: 4.2rem;
   }
 
   span.timer-offset {
@@ -233,6 +216,31 @@
   footer {
     margin-top: 1rem;
     text-align: center;
+  }
+  @media (orientation: landscape) {
+    nav.times,
+    div.timer-control {
+      max-width: 50rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    div.timer-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    div.timer-control section {
+      flex: 1;
+    }
+    section .timer-wrapper {
+      order: 3;
+      flex: 1;
+      align-items: center;
+    }
+    section button {
+      margin: 1rem !important;
+    }
   }
 </style>
 
@@ -261,19 +269,21 @@
         -1min
       </button>
     </div>
-    <div class="timer" on:click={toggleTimer} style={progressGradient}>
-      <div>
-        <span class="time">
-          <span>
-            <span>{formatTime(remainingTime)}</span>
-            <span class="decis">{formatDecis(remainingTime)}</span>
+    <div class="timer-wrapper">
+      <div class="timer" on:click={toggleTimer} style={progressGradient}>
+        <div>
+          <span class="time">
+            <span>
+              <span>{formatTime(remainingTime)}</span>
+              <span class="decis">{formatDecis(remainingTime)}</span>
+            </span>
           </span>
-        </span>
-        {#if currentOffset !== 0}
-          <span class="timer-offset">
-             {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
-          </span>
-        {/if}
+          {#if currentOffset !== 0}
+            <span class="timer-offset">
+               {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
+            </span>
+          {/if}
+        </div>
       </div>
     </div>
     <div>
