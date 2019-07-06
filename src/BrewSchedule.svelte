@@ -26,7 +26,7 @@
 
     if (running) {
       const hsl = hex2hsl(color);
-      hsl[2] += (Math.sin(total * progress * 0.04) + 1) * 5;
+      hsl[2] += Math.abs((Math.round(total * progress * 0.1) % 20) - 10);
       color = hsl2hex(hsl);
     }
 
