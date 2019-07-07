@@ -146,6 +146,12 @@
     padding: 1rem;
     border-radius: 0.5rem;
   }
+  div.timer-control button {
+    background-color: #3e3e3e;
+  }
+  div.timer-control button:active {
+    background-color: #555555;
+  }
   section {
     display: flex;
     align-items: center;
@@ -197,7 +203,7 @@
 
   span.timer-offset {
     position: absolute;
-    background-color: #4a4a4a;
+    background-color: #3e3e3e;
     top: 11.5rem;
     font-size: 1.4rem;
     padding: 0.4rem 1.5rem;
@@ -212,6 +218,7 @@
   }
   button.toggle.reset {
     color: #979797;
+    font-weight: lighter;
   }
   footer {
     margin-top: 1rem;

@@ -128,19 +128,15 @@
 
   nav {
     position: absolute;
+    top: 2.3rem;
   }
   nav.back {
     left: 1.5rem;
   }
   nav.menu {
-    right: 1.5rem;
-    top: 2.3rem;
-  }
-  .content {
-    position: relative;
+    right: 1.3rem;
   }
   .config-menu {
-    /* margin-top: 5.7rem; */
     position: absolute;
     width: 100%;
     top: 0;
@@ -185,25 +181,23 @@
   }
 </style>
 
-<div class="content">
-  <nav class="back">
-    {#if currentRecipe !== null}
-      <NavIcon on:click={listRecipes} icon="arrow left" />
-    {/if}
-  </nav>
-  <h1>{title}</h1>
-  {#if currentRecipe === null}
-    <h2>DEFAULT ITEMS</h2>
-    <div class="gallery">
-      {#each teaRecipes as recipe}
-        <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
-      {/each}
-    </div>
-    <h2>CUSTOM ITEMS</h2>
-  {:else}
-    <BrewSchedule recipe={currentRecipe} {config} />
+<nav class="back">
+  {#if currentRecipe !== null}
+    <NavIcon on:click={listRecipes} icon="arrow left" />
   {/if}
-</div>
+</nav>
+<h1>{title}</h1>
+{#if currentRecipe === null}
+  <h2>DEFAULT ITEMS</h2>
+  <div class="gallery">
+    {#each teaRecipes as recipe}
+      <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
+    {/each}
+  </div>
+  <h2>CUSTOM ITEMS</h2>
+{:else}
+  <BrewSchedule recipe={currentRecipe} {config} />
+{/if}
 
 <nav class="menu">
   <NavIcon on:click={toggleMenu} icon={config.menu ? 'arrow up' : 'menu'} />
