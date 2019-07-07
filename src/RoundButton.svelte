@@ -12,8 +12,7 @@
     border: 1px solid #979797;
     border-radius: 50%;
   }
-  div::after,
-  div::before {
+  div::after {
     content: "";
     display: block;
     position: absolute;
@@ -21,18 +20,6 @@
     left: 50%;
     height: 1rem;
     width: 1rem;
-    transform: translate(-50%, -50%);
-  }
-
-  div.menu::after {
-    border: 1px solid #979797;
-    border-left: none;
-    border-right: none;
-  }
-
-  div.menu::before {
-    border-top: 1px solid #979797;
-    transform: translate(-50%, -0.5px);
   }
 
   div.arrow-right::after,

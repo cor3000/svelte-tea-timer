@@ -2,6 +2,7 @@
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
   import RoundButton from "./RoundButton.svelte";
+  import NavIcon from "./NavIcon.svelte";
 
   import { recipes as defaultRecipes } from "./defaultRecipes.js";
   import { recipeBg, recipeFg } from "./dynStyles.js";
@@ -14,6 +15,7 @@
   let config = {
     menu: false,
     sound: true,
+    showExportImport: false,
     notifications:
       window.Notification && window.Notification.permission === "granted"
   };
@@ -104,7 +106,7 @@
     color: white;
     text-align: center;
     padding: 0;
-    margin: 1rem 0;
+    margin: 1rem 2rem 1.5rem 2rem;
   }
   h2 {
     font-size: 1.4rem;
@@ -127,54 +129,43 @@
   nav {
     position: absolute;
   }
-  .config-menu {
-    margin-top: 5rem;
+  nav.back {
+    left: 1.5rem;
   }
-  .config-menu > * {
+  nav.menu {
+    right: 1.5rem;
+    top: 2.3rem;
+  }
+  .content {
+    position: relative;
+  }
+  .config-menu {
+    margin-top: 5.7rem;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 0 1rem 1rem 1rem;
+    background-color: #222222;
+  }
+  .config-menu > div {
     display: block;
-    font-size: 1.4rem;
+    font-size: 2rem;
     color: #979797;
-    margin: 1em 0;
+    margin: 1.5em 2rem;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #333333;
   }
 </style>
 
-<nav class="top-left-nav">
-  {#if currentRecipe === null}
-    <RoundButton
-      on:click={toggleMenu}
-      icon={config.menu ? 'arrow-left' : 'menu'} />
-  {:else}
-    <RoundButton on:click={listRecipes} icon="arrow-left" />
-  {/if}
-</nav>
-{#if config.menu}
-  <h1>Tea Time - Configuration</h1>
-  <div class="config-menu">
-    <label>
-      <input type="checkbox" bind:checked={config.sound} />
-      Sound
-    </label>
-    {#if window.Notification}
-      <label>
-        <input
-          type="checkbox"
-          bind:checked={config.notifications}
-          on:change={toggleNotifications} />
-        Notifications
-      </label>
+<div class="content">
+  <nav class="back">
+    {#if currentRecipe !== null}
+      <NavIcon on:click={listRecipes} icon="arrow left" />
     {/if}
-    <div>
-      <button on:click={exportRecipes}>Export Recipes</button>
-    </div>
-    <div>
-      Import Recipes
-      <input type="file" on:change={importRecipes} />
-    </div>
-    <div>
-      <button on:click={resetRecipes}>Reset Recipes</button>
-    </div>
-  </div>
-{:else}
+  </nav>
   <h1>{title}</h1>
   {#if currentRecipe === null}
     <h2>DEFAULT ITEMS</h2>
@@ -187,4 +178,49 @@
   {:else}
     <BrewSchedule recipe={currentRecipe} {config} />
   {/if}
+</div>
+
+<nav class="menu">
+  <NavIcon on:click={toggleMenu} icon={config.menu ? 'arrow up' : 'menu'} />
+</nav>
+{#if config.menu}
+  <div class="config-menu">
+    <h1>Configuration</h1>
+    <div>
+      <label>
+        <input type="checkbox" bind:checked={config.sound} />
+        Sound
+      </label>
+    </div>
+    {#if window.Notification}
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            bind:checked={config.notifications}
+            on:change={toggleNotifications} />
+          Notifications
+        </label>
+      </div>
+    {/if}
+    <hr />
+    <div>
+      <label>
+        <input type="checkbox" bind:checked={config.showExportImport} />
+        Advanced
+      </label>
+    </div>
+    {#if config.showExportImport}
+      <div>
+        <button on:click={exportRecipes}>Export Recipes</button>
+      </div>
+      <div>
+        Import Recipes
+        <input type="file" on:change={importRecipes} />
+      </div>
+      <div>
+        <button on:click={resetRecipes}>Reset Recipes</button>
+      </div>
+    {/if}
+  </div>
 {/if}
