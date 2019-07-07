@@ -140,20 +140,45 @@
     position: relative;
   }
   .config-menu {
-    margin-top: 5.7rem;
+    /* margin-top: 5.7rem; */
     position: absolute;
     width: 100%;
     top: 0;
     left: 0;
-    padding: 0 1rem 1rem 1rem;
+    padding: 1rem;
     background-color: #222222;
   }
   .config-menu > div {
     display: block;
     font-size: 2rem;
     color: #979797;
-    margin: 1.5em 2rem;
+    margin: 1em 2rem;
+    display: flex;
+    justify-content: space-between;
   }
+  .config-menu > div > label {
+    flex: 1;
+  }
+
+  .config-menu input[type="checkbox"] {
+    height: 2rem;
+    width: 2rem;
+  }
+
+  .import {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  .import input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+
   hr {
     border: none;
     border-top: 1px solid #333333;
@@ -185,41 +210,40 @@
 </nav>
 {#if config.menu}
   <div class="config-menu">
+    <nav class="menu">
+      <NavIcon on:click={toggleMenu} icon={config.menu ? 'arrow up' : 'menu'} />
+    </nav>
     <h1>Configuration</h1>
     <div>
-      <label>
-        <input type="checkbox" bind:checked={config.sound} />
-        Sound
-      </label>
+      <label for="sound">Sound</label>
+      <input id="sound" type="checkbox" bind:checked={config.sound} />
     </div>
     {#if window.Notification}
       <div>
-        <label>
-          <input
-            type="checkbox"
-            bind:checked={config.notifications}
-            on:change={toggleNotifications} />
-          Notifications
-        </label>
+        <label for="notifications">Notifications</label>
+        <input
+          id="notifications"
+          type="checkbox"
+          bind:checked={config.notifications}
+          on:change={toggleNotifications} />
       </div>
     {/if}
     <hr />
     <div>
-      <label>
-        <input type="checkbox" bind:checked={config.showExportImport} />
-        Advanced
-      </label>
+      <label for="advanced">Advanced</label>
+      <input
+        id="advanced"
+        type="checkbox"
+        bind:checked={config.showExportImport} />
     </div>
     {#if config.showExportImport}
       <div>
-        <button on:click={exportRecipes}>Export Recipes</button>
-      </div>
-      <div>
-        Import Recipes
-        <input type="file" on:change={importRecipes} />
-      </div>
-      <div>
-        <button on:click={resetRecipes}>Reset Recipes</button>
+        <button on:click={exportRecipes}>Export</button>
+        <span class="import">
+          <button>Import</button>
+          <input type="file" on:change={importRecipes} />
+        </span>
+        <button on:click={resetRecipes}>Reset</button>
       </div>
     {/if}
   </div>
