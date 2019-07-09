@@ -5,7 +5,6 @@
   import NavIcon from "./NavIcon.svelte";
 
   import { recipes as defaultRecipes } from "./defaultRecipes.js";
-  import { recipeBg, recipeFg } from "./dynStyles.js";
 
   export let title;
 
@@ -188,13 +187,13 @@
 </nav>
 <h1>{title}</h1>
 {#if currentRecipe === null}
-  <h2>DEFAULT ITEMS</h2>
+  <h2>PRESETS</h2>
   <div class="gallery">
     {#each teaRecipes as recipe}
       <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
     {/each}
   </div>
-  <h2>CUSTOM ITEMS</h2>
+  <!-- <h2>CUSTOM ITEMS</h2> -->
 {:else}
   <BrewSchedule recipe={currentRecipe} {config} />
 {/if}

@@ -49,5 +49,19 @@ export const recipes = [
         label: "普洱茶",
         color: palette[6],
         brewTimes: [80, 10, 15, 15, 20, 30, 40, 60]
+    },
+    {
+        id: "007",
+        name: "Yame Tea",
+        label: "八女茶",
+        color: palette[7],
+        brewTimes: [30, 40]
+    },
+    {
+        id: "008",
+        name: "Custom Timer",
+        label: "自訂",
+        color: palette[8],
+        brewTimes: [60]
     }
 ];
