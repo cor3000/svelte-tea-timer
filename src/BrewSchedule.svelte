@@ -1,9 +1,10 @@
 <script>
+  import { onDestroy } from "svelte";
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
   import { hsl2hex, hex2hsl } from "./colors.js";
-  import { onDestroy } from "svelte";
+  import { swipe } from "./swipe.js";
 
   export let recipe;
   export let config;
@@ -67,8 +68,13 @@
   }
 
   function offset(seconds) {
-    currentOffset += seconds;
-    timer.offset(seconds);
+    updateOffset(currentOffset + seconds);
+  }
+
+  function updateOffset(offset) {
+    const delta = offset - currentOffset;
+    currentOffset = offset;
+    timer.offset(delta);
     remainingTime = timer.remaining();
   }
 

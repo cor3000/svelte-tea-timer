@@ -5,6 +5,7 @@
   import NavIcon from "./NavIcon.svelte";
 
   import { recipes as defaultRecipes } from "./defaultRecipes.js";
+  import { swipe } from "./swipe.js";
 
   export let title;
 
@@ -180,6 +181,7 @@
   }
 </style>
 
+<svelte:window use:swipe on:swipeleft={listRecipes} />
 <nav class="back">
   {#if currentRecipe !== null}
     <NavIcon on:click={listRecipes} icon="arrow left" />

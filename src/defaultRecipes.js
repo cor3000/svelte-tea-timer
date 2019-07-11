@@ -48,7 +48,7 @@ export const recipes = [
         name: "Pu'er Tea",
         label: "普洱茶",
         color: palette[6],
-        brewTimes: [80, 10, 15, 15, 20, 30, 40, 60]
+        brewTimes: [100, 10, 15, 15, 20, 30, 40, 60]
     },
     {
         id: "007",

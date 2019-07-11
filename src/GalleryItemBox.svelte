@@ -1,6 +1,6 @@
 <script>
   export let color;
-  export let extraProps;
+  export let extraProps = {};
 </script>
 
 <style>
