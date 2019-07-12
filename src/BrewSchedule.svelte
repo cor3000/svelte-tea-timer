@@ -1,10 +1,12 @@
 <script>
-  import { onDestroy } from "svelte";
+  import { onDestroy, createEventDispatcher } from "svelte";
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
   import { hsl2hex, hex2hsl } from "./colors.js";
   import { swipe } from "./swipe.js";
+
+  const dispatch = createEventDispatcher();
 
   export let recipe;
   export let config;
@@ -20,6 +22,12 @@
   );
 
   const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
+
+  onDestroy(resetTimer);
+
+  function switchRecipe(direction) {
+    dispatch("switchRecipe", direction);
+  }
 
   function calculateProgressGradient(total, remaining, color) {
     let progress =
@@ -96,8 +104,6 @@
       timer.start();
     }
   }
-
-  onDestroy(resetTimer);
 </script>
 
 <style>
@@ -257,10 +263,15 @@
   }
 </style>
 
-<GalleryItemBox color={recipe.color}>
-  <div class="label1">{recipe.label}</div>
-  <div class="label2">{recipe.name}</div>
-</GalleryItemBox>
+<div
+  use:swipe
+  on:swipeleft={() => switchRecipe(1)}
+  on:swiperight={() => switchRecipe(-1)}>
+  <GalleryItemBox color={recipe.color}>
+    <div class="label1">{recipe.label}</div>
+    <div class="label2">{recipe.name}</div>
+  </GalleryItemBox>
+</div>
 <audio src="Bing.mp3" id="bing" />
 <nav class="times">
   <button on:click={prev}>Prev</button>

@@ -1,4 +1,5 @@
 <script>
+  import { tick } from "svelte";
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
   import RoundButton from "./RoundButton.svelte";
@@ -89,6 +90,15 @@
     }
   }
 
+  function switchRecipe(event) {
+    const index = teaRecipes.indexOf(currentRecipe);
+    const len = teaRecipes.length;
+    listRecipes();
+    tick().then(() => {
+      enterRecipe(teaRecipes[(index + event.detail + len) % len]);
+    });
+  }
+
   function enterRecipe(recipe) {
     currentRecipe = recipe;
     saveCurrentRecipe(recipe);
@@ -160,6 +170,13 @@
     height: 2rem;
     width: 2rem;
   }
+  .config-menu button {
+    background-color: #4a4a4a;
+    border: none;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
 
   .import {
     position: relative;
@@ -181,7 +198,7 @@
   }
 </style>
 
-<svelte:window use:swipe on:swipeleft={listRecipes} />
+<svelte:window use:swipe on:swiperight={listRecipes} />
 <nav class="back">
   {#if currentRecipe !== null}
     <NavIcon on:click={listRecipes} icon="arrow left" />
@@ -197,7 +214,10 @@
   </div>
   <!-- <h2>CUSTOM ITEMS</h2> -->
 {:else}
-  <BrewSchedule recipe={currentRecipe} {config} />
+  <BrewSchedule
+    recipe={currentRecipe}
+    {config}
+    on:switchRecipe={switchRecipe} />
 {/if}
 
 <nav class="menu">
