@@ -1,4 +1,10 @@
 
+export const gesture = {
+    LEFT: 'left',
+    RIGHT: 'right',
+    UP: 'up',
+    DOWN: 'down'
+}
 
 export const swipe = function (node) {
     let start;
@@ -18,41 +24,43 @@ export const swipe = function (node) {
         };
     };
 
-    const stop = event => {
-        event.preventDefault();
+    const stop = (event, preventDefault) => {
         event.stopPropagation();
+        if (preventDefault) {
+            event.preventDefault()
+        };
+    }
+
+    const dispatchSwipeEvent = (gesture, delta, event) => {
+        node.dispatchEvent(new CustomEvent('swipe', { detail: { gesture, delta } }));
+        stop(event);
     }
 
     node.addEventListener('touchstart', e => {
         start = { time: e.timeStamp, touch: e.touches[0] };
         end = null;
-    });
+    }, { passive: true });
     node.addEventListener('touchmove', e => {
         stop(e);
         end = { time: e.timeStamp, touch: e.touches[0] };
-        const delta = calcDelta(start, end);
-        if (delta.dur > 50) {
-            node.dispatchEvent(new CustomEvent('dragging', { detail: delta }));
-        }
-    });
+    }, { passive: true });
     node.addEventListener('touchend', e => {
         if (start && end) {
             const delta = calcDelta(start, end);
             if (delta.dur > 50 && delta.dur < 1000 && delta.dist > 70.0) {
                 if (delta.vx < -0.8) {
-                    node.dispatchEvent(new CustomEvent('swipeleft'));
+                    dispatchSwipeEvent(gesture.LEFT, delta, e);
                 }
                 if (delta.vx > 0.8) {
-                    node.dispatchEvent(new CustomEvent('swiperight'));
+                    dispatchSwipeEvent(gesture.RIGHT, delta, e);
                 }
                 if (delta.vy < -0.8) {
-                    node.dispatchEvent(new CustomEvent('swipeup'));
+                    dispatchSwipeEvent(gesture.UP, delta, e);
                 }
                 if (delta.vy > 0.8) {
-                    node.dispatchEvent(new CustomEvent('swipedown'));
+                    dispatchSwipeEvent(gesture.DOWN, delta, e);
                 }
             }
-            stop(e);
         }
         start = null;
         end = null;

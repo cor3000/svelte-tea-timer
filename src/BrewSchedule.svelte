@@ -4,7 +4,7 @@
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
   import { hsl2hex, hex2hsl } from "./colors.js";
-  import { swipe } from "./swipe.js";
+  import { swipe, gesture } from "./swipe.js";
 
   const dispatch = createEventDispatcher();
 
@@ -25,8 +25,15 @@
 
   onDestroy(resetTimer);
 
-  function switchRecipe(direction) {
-    dispatch("switchRecipe", direction);
+  function swipeRecipe(event) {
+    switch (event.detail.gesture) {
+      case gesture.LEFT:
+        dispatch("switchRecipe", +1);
+        break;
+      case gesture.RIGHT:
+        dispatch("switchRecipe", -1);
+        break;
+    }
   }
 
   function calculateProgressGradient(total, remaining, color) {
@@ -263,10 +270,7 @@
   }
 </style>
 
-<div
-  use:swipe
-  on:swipeleft={() => switchRecipe(1)}
-  on:swiperight={() => switchRecipe(-1)}>
+<div use:swipe on:swipe={swipeRecipe}>
   <GalleryItemBox color={recipe.color}>
     <div class="label1">{recipe.label}</div>
     <div class="label2">{recipe.name}</div>
@@ -277,7 +281,7 @@
   <button on:click={prev}>Prev</button>
   <ul>
     {#each recipe.brewTimes as duration, i}
-      <li class:current={currentIndex === i}> {formatTime(duration)} </li>
+      <li class:current={currentIndex === i}>{formatTime(duration)}</li>
     {/each}
   </ul>
   <button on:click={next}>Next</button>
@@ -304,7 +308,7 @@
           </span>
           {#if currentOffset !== 0}
             <span class="timer-offset">
-               {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
+              {currentOffset > 0 ? '+' : '-'}{formatTime(currentOffset)}
             </span>
           {/if}
         </div>
@@ -320,7 +324,7 @@
   </section>
   <footer>
     <button class="toggle" class:reset={running} on:click={toggleTimer}>
-       {running ? 'RESET' : 'GO'}
+      {running ? 'RESET' : 'GO'}
     </button>
   </footer>
 </div>
