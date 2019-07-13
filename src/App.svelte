@@ -1,5 +1,7 @@
 <script>
   import { tick } from "svelte";
+  import { fly } from "svelte/transition";
+
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
   import RoundButton from "./RoundButton.svelte";
@@ -200,7 +202,7 @@
 
 <svelte:window
   use:swipe
-  on:swipe={e => e.detail.gesture === gesture.RIGHT && listRecipes()} />
+  on:swipe={e => e.detail[gesture.RIGHT] && listRecipes()} />
 <nav class="back">
   {#if currentRecipe !== null}
     <NavIcon on:click={listRecipes} icon="arrow left" />
@@ -223,12 +225,16 @@
 {/if}
 
 <nav class="menu">
-  <NavIcon on:click={toggleMenu} icon={config.menu ? 'arrow up' : 'menu'} />
+  <NavIcon on:click={toggleMenu} icon="menu" />
 </nav>
 {#if config.menu}
-  <div class="config-menu">
+  <div
+    class="config-menu"
+    transition:fly={{ y: -100, duration: 100 }}
+    use:swipe
+    on:swipe={e => e.detail[gesture.UP] && toggleMenu()}>
     <nav class="menu">
-      <NavIcon on:click={toggleMenu} icon={config.menu ? 'arrow up' : 'menu'} />
+      <NavIcon on:click={toggleMenu} icon="arrow up" />
     </nav>
     <h1>Configuration</h1>
     <div>

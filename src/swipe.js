@@ -32,7 +32,11 @@ export const swipe = function (node) {
     }
 
     const dispatchSwipeEvent = (gesture, delta, event) => {
-        node.dispatchEvent(new CustomEvent('swipe', { detail: { gesture, delta } }));
+        node.dispatchEvent(new CustomEvent('swipe', {
+            detail: {
+                gesture, delta, [gesture]: true
+            }
+        }));
         stop(event);
     }
 
