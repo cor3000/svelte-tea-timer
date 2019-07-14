@@ -6,7 +6,10 @@ export const gesture = {
     DOWN: 'down'
 }
 
-export const swipe = function (node) {
+const defaultOpts = { lockScroll: false }
+
+export const swipe = function (node, opts) {
+    const { lockScroll } = { ...defaultOpts, ...opts };
     let start;
     let end;
 
@@ -24,9 +27,9 @@ export const swipe = function (node) {
         };
     };
 
-    const stop = (event, preventDefault) => {
+    const stop = (event) => {
         event.stopPropagation();
-        if (preventDefault) {
+        if (lockScroll === true) {
             event.preventDefault()
         };
     }
@@ -43,11 +46,11 @@ export const swipe = function (node) {
     node.addEventListener('touchstart', e => {
         start = { time: e.timeStamp, touch: e.touches[0] };
         end = null;
-    }, { passive: true });
+    }, { passive: !lockScroll });
     node.addEventListener('touchmove', e => {
         stop(e);
         end = { time: e.timeStamp, touch: e.touches[0] };
-    }, { passive: true });
+    }, { passive: !lockScroll });
     node.addEventListener('touchend', e => {
         if (start && end) {
             const delta = calcDelta(start, end);

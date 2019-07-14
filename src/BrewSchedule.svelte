@@ -129,6 +129,7 @@
     border: none;
     border-radius: 50%;
     background-color: #4a4a4a;
+    cursor: pointer;
   }
   button:focus,
   button:active {

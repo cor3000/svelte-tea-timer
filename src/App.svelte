@@ -231,7 +231,7 @@
   <div
     class="config-menu"
     transition:fly={{ y: -100, duration: 100 }}
-    use:swipe
+    use:swipe={{ lockScroll: true }}
     on:swipe={e => e.detail[gesture.UP] && toggleMenu()}>
     <nav class="menu">
       <NavIcon on:click={toggleMenu} icon="arrow up" />
