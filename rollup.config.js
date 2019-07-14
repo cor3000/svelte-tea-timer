@@ -1,9 +1,9 @@
 import svelte from 'rollup-plugin-svelte';
+import css from 'rollup-plugin-css-porter';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import css from 'rollup-plugin-css-porter';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -12,27 +12,25 @@ export default {
 	output: {
 		sourcemap: true,
 		format: 'iife',
-		name: 'app',
+		name: 'teatimeApp',
 		file: 'public/bundle.js'
 	},
 	plugins: [
-		css(production ? { minified: 'public/global.css', raw: false }
-			: { raw: 'public/global.css', minified: false }),
 		svelte({
 			// enable run-time checks when not in production
 			dev: !production,
 			// we'll extract any component CSS out into
 			// a separate file — better for performance
-			css: css => {
-				css.write('public/bundle.css');
-			}
+			// css: css => {	css.write('public/bundle.css');	},
+			// emit to css plugin below
+			emitCss: true
 		}),
 
-		// If you have external dependencies installed from
-		// npm, you'll most likely need these plugins. In
-		// some cases you'll need additional configuration —
-		// consult the documentation for details:
-		// https://github.com/rollup/rollup-plugin-commonjs
+		css({
+			minified: production ? 'public/bundle.css' : false,
+			raw: production ? false : 'public/bundle.css'
+		}),
+
 		resolve({ browser: true }),
 		commonjs(),
 
