@@ -65,7 +65,13 @@
     }
     if (config.notifications === true) {
       if (Notification && Notification.permission === "granted") {
-        const notification = new Notification("Tea Ready!!");
+        const notification = new Notification("Tea Time", {
+          body: "Your tea is ready.",
+          vibrate: [300, 100, 100, 100, 100],
+          image: "/img/teatime_4.png",
+          icon: "/img/teatime_4.png",
+          badge: "/img/teatime_4.png"
+        });
         setTimeout(notification.close.bind(notification), 4000);
       }
     }
