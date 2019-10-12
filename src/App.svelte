@@ -221,7 +221,8 @@
   <BrewSchedule
     recipe={currentRecipe}
     {config}
-    on:switchRecipe={switchRecipe} />
+    on:switchRecipe={switchRecipe}
+    on:closeRecipe={listRecipes} />
 {/if}
 
 <nav class="menu">

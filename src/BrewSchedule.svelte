@@ -28,12 +28,16 @@
   function swipeRecipe(event) {
     switch (event.detail.gesture) {
       case gesture.LEFT:
-        dispatch("switchRecipe", +1);
+        switchRecipe(+1);
         break;
       case gesture.RIGHT:
-        dispatch("switchRecipe", -1);
+        switchRecipe(-1);
         break;
     }
+  }
+
+  function switchRecipe(offset) {
+    dispatch("switchRecipe", offset);
   }
 
   function calculateProgressGradient(total, remaining, color) {
@@ -115,6 +119,27 @@
       resetTimer();
     } else {
       timer.start();
+    }
+  }
+
+  const keyMappings = {
+    " ": toggleTimer,
+    ArrowRight: next,
+    ArrowLeft: prev,
+    PageUp: () => switchRecipe(-1),
+    PageDown: () => switchRecipe(+1),
+    Backspace: () => dispatch("closeRecipe"),
+    "+": () => offset(60),
+    "-": () => offset(-60),
+    ArrowUp: () => offset(10),
+    ArrowDown: () => offset(-10)
+  };
+
+  function handleKey(event) {
+    const action = keyMappings[event.key];
+    if (action) {
+      action();
+      event.preventDefault;
     }
   }
 </script>
@@ -276,6 +301,8 @@
     }
   }
 </style>
+
+<svelte:window on:keydown={handleKey} />
 
 <div use:swipe on:swipe={swipeRecipe}>
   <GalleryItemBox color={recipe.color}>
