@@ -1,5 +1,5 @@
 <script>
-  import { onDestroy, createEventDispatcher } from "svelte";
+  import { onMount, onDestroy, createEventDispatcher } from "svelte";
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
@@ -15,14 +15,11 @@
   let currentOffset = 0;
   let remainingTime = 0;
   let running = false;
-  $: progressGradient = calculateProgressGradient(
-    recipe.brewTimes[currentIndex] + currentOffset,
-    remainingTime,
-    recipe.color
-  );
 
   const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
+  let progressGradientElement;
 
+  onMount(updateProgressGradient);
   onDestroy(resetTimer);
 
   function swipeRecipe(event) {
@@ -40,9 +37,19 @@
     dispatch("switchRecipe", offset);
   }
 
-  function calculateProgressGradient(total, remaining, color) {
+  let lastProgress = -1;
+  function updateProgressGradient() {
+    let total = recipe.brewTimes[currentIndex] + currentOffset;
+    let remaining = remainingTime;
+    let color = recipe.color;
+
     let progress =
       total <= 0 ? 0 : Math.floor((remainingTime / total) * 100 * 5) / 5;
+
+    if (progress === lastProgress) {
+      return;
+    }
+    lastProgress = progress;
 
     if (running) {
       const hsl = hex2hsl(color);
@@ -52,18 +59,26 @@
 
     let colorStops = `${color}, ${color} ${progress * 1.005 -
       0.5}%, #000 ${progress * 1.005}%`;
-    return (
-      `background-image: linear-gradient(${colorStops});` +
-      `background-image: conic-gradient(${colorStops});`
+
+    progressGradientElement.style.setProperty(
+      "background-image",
+      `linear-gradient(${colorStops}`
+    );
+
+    progressGradientElement.style.setProperty(
+      "background-image",
+      `conic-gradient(${colorStops}`
     );
   }
 
   function tick(remaining) {
     updateTimerVars(timer);
+    updateProgressGradient();
   }
 
   function finish() {
     next();
+    updateProgressGradient();
     if (config.sound === true) {
       document.getElementById("bing").play();
     }
@@ -332,7 +347,10 @@
       </button>
     </div>
     <div class="timer-wrapper">
-      <div class="timer" on:click={toggleTimer} style={progressGradient}>
+      <div
+        bind:this={progressGradientElement}
+        class="timer"
+        on:click={toggleTimer}>
         <div>
           <span class="time">
             <span>
