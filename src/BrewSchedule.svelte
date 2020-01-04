@@ -19,7 +19,7 @@
   const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
   let progressGradientElement;
 
-  onMount(updateProgressGradient);
+  onMount(resetTimer);
   onDestroy(resetTimer);
 
   function swipeRecipe(event) {
@@ -96,8 +96,6 @@
     }
   }
 
-  resetTimer();
-
   function prev() {
     currentIndex = Math.max(currentIndex - 1, 0);
     resetTimer();
@@ -122,6 +120,7 @@
     timer.reset(recipe.brewTimes[currentIndex]);
     timer.offset(currentOffset);
     updateTimerVars(timer);
+    updateProgressGradient();
   }
 
   function updateTimerVars(timer) {

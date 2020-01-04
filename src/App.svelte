@@ -1,6 +1,5 @@
 <script>
   import { tick } from "svelte";
-  import { fly } from "svelte/transition";
 
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
@@ -9,6 +8,7 @@
 
   import { recipes as defaultRecipes } from "./defaultRecipes.js";
   import { swipe, gesture } from "./swipe.js";
+  import { fly } from "./transitions.js";
 
   export let title;
 
@@ -231,7 +231,7 @@
 {#if config.menu}
   <div
     class="config-menu"
-    transition:fly={{ y: -100, duration: 100 }}
+    transition:fly={{ from: 'top', duration: 150 }}
     use:swipe={{ lockScroll: true }}
     on:swipe={e => e.detail[gesture.UP] && toggleMenu()}>
     <nav class="menu">
