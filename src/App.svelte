@@ -132,7 +132,7 @@
     grid-gap: 0.8rem;
   }
 
-  @media (min-width: 640px) {
+  @media (orientation: landscape) {
     div.gallery {
       grid-template-columns: 1fr 1fr;
     }

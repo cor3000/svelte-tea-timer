@@ -1,14 +1,13 @@
 
 html { 
-	font-size: 62.5%;
+	font-size: 3vw;
 } 
 
-@media (min-width: 400px) {
-	html { 
-		font-size: 75%;
+@media (orientation: landscape) {
+	html {
+		font-size: 1.7vw;
 	}
 }
-
 
 body {
 	background-color: rgb(51, 51, 51);/*#333333*/
