@@ -7,7 +7,7 @@ const securityHeaders = {
         img-src 'self'; \
         style-src 'self'; \
         frame-ancestors 'none';",
-    "Feature-Policy": "notifications 'self'; speaker 'self'",
+    /*"Feature-Policy": "notifications 'self'; speaker 'self'",*/
     "Strict-Transport-Security": "max-age=2592000",
     "X-Xss-Protection": "1; mode=block",
     "X-Frame-Options": "DENY",
