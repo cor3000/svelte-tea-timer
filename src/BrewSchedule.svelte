@@ -1,21 +1,19 @@
 <script>
-  import { createEventDispatcher, untrack } from "svelte";
+  import { untrack } from "svelte";
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
   import { hsl2hex, hex2hsl } from "./colors.js";
   import { swipe, gesture } from "./swipe.js";
 
-  const dispatch = createEventDispatcher();
-
-  let { recipe, config } = $props();
+  let { recipe, config, onSwitchRecipe, onCloseRecipe } = $props();
 
   let currentIndex = $state(0);
   let currentOffset = $state(0);
   let remainingTime = $state(0);
   let running = $state(false);
 
-  const timer = createTimer(recipe.brewTimes[currentIndex], tick, finish);
+  const timer = createTimer(recipe.brewTimes[0], tick, finish);
   let progressGradientElement;
 
   $effect(() => {
@@ -46,7 +44,7 @@
   }
 
   function switchRecipe(offset) {
-    dispatch("switchRecipe", offset);
+    onSwitchRecipe(offset);
   }
 
   let lastProgress = -1;
@@ -83,7 +81,7 @@
     );
   }
 
-  function tick(remaining) {
+  function tick() {
     updateTimerVars(timer);
     updateProgressGradient();
   }
@@ -152,7 +150,7 @@
     ArrowLeft: prev,
     PageUp: () => switchRecipe(-1),
     PageDown: () => switchRecipe(+1),
-    Backspace: () => dispatch("closeRecipe"),
+    Backspace: () => onCloseRecipe(),
     "+": () => offset(60),
     "-": () => offset(-60),
     ArrowUp: () => offset(10),
@@ -326,9 +324,9 @@
   }
 </style>
 
-<svelte:window on:keydown={handleKey} />
+<svelte:window onkeydown={handleKey} />
 
-<div use:swipe={{ lockScroll: true }} on:swipe={swipeRecipe}>
+<div use:swipe={{ lockScroll: true }} onswipe={swipeRecipe}>
   <GalleryItemBox color={recipe.color}>
     <div class="label1">{recipe.label}</div>
     <div class="label2">{recipe.name}</div>
@@ -336,22 +334,22 @@
 </div>
 <audio src="Bing.mp3" id="bing"></audio>
 <nav class="times">
-  <button on:click={prev}>Prev</button>
+  <button onclick={prev}>Prev</button>
   <ul>
     {#each recipe.brewTimes as duration, i}
       <li class:current={currentIndex === i}>{formatTime(duration)}</li>
     {/each}
   </ul>
-  <button on:click={next}>Next</button>
+  <button onclick={next}>Next</button>
 </nav>
 <div class="timer-control">
   <section>
     <div>
-      <button style="margin-left: 2rem;" on:click={() => offset(-5)}>
+      <button style="margin-left: 2rem;" onclick={() => offset(-5)}>
         -5s
       </button>
-      <button on:click={() => offset(-10)}>-10s</button>
-      <button style="margin-left: 2rem;" on:click={() => offset(-60)}>
+      <button onclick={() => offset(-10)}>-10s</button>
+      <button style="margin-left: 2rem;" onclick={() => offset(-60)}>
         -1min
       </button>
     </div>
@@ -359,7 +357,7 @@
       <div
         bind:this={progressGradientElement}
         class="timer"
-        on:click={toggleTimer}
+        onclick={toggleTimer}
         role="none">
         <div>
           <span class="time">
@@ -377,15 +375,15 @@
       </div>
     </div>
     <div>
-      <button on:click={() => offset(5)}>+5s</button>
-      <button style="margin-left: 2rem;" on:click={() => offset(10)}>
+      <button onclick={() => offset(5)}>+5s</button>
+      <button style="margin-left: 2rem;" onclick={() => offset(10)}>
         +10s
       </button>
-      <button on:click={() => offset(60)}>+1min</button>
+      <button onclick={() => offset(60)}>+1min</button>
     </div>
   </section>
   <footer>
-    <button class="toggle" class:reset={running} on:click={toggleTimer}>
+    <button class="toggle" class:reset={running} onclick={toggleTimer}>
       {running ? 'RESET' : 'GO'}
     </button>
   </footer>

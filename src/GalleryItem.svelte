@@ -3,7 +3,7 @@
   import RoundButton from "./RoundButton.svelte";
   import { formatTime } from "./format.js";
 
-  let { recipe } = $props();
+  let { recipe, onclick } = $props();
 </script>
 
 <style>
@@ -46,7 +46,7 @@
 </style>
 
 <GalleryItemBox
-  on:click
+  {onclick}
   color={recipe.color}
   extraProps={{ style: 'cursor:pointer' }}>
   <div class="label1">{recipe.label}</div>
@@ -57,6 +57,6 @@
     {/each}
   </div>
   <div class="button-pos">
-    <RoundButton icon="arrow-right" />
+    <RoundButton icon="arrow-right" onclick={onclick} />
   </div>
 </GalleryItemBox>

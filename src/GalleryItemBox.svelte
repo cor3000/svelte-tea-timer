@@ -1,5 +1,5 @@
 <script>
-  let { color, extraProps = {} } = $props();
+  let { color, onclick, extraProps = {}, children } = $props();
 </script>
 
 <style>
@@ -21,7 +21,7 @@
   }
 </style>
 
-<div {...extraProps} on:click>
+<div {...extraProps} {onclick}>
   <i style="background-color: {color}"></i>
-  <slot></slot>
+  {@render children()}
 </div>

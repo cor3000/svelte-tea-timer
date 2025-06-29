@@ -13,7 +13,9 @@
 
   let teaRecipes = $state(loadRecipes(defaultRecipes));
 
-  let currentRecipe = $state(loadCurrentRecipe(teaRecipes));
+  let currentRecipeId = $state(localStorage.getItem("currentRecipeId"));
+  let currentRecipe = $derived(teaRecipes.find(r => r.id == currentRecipeId) || null);
+
   let config = $state({
     menu: false,
     sound: true,
@@ -78,19 +80,6 @@
     downloadAnchorNode.remove();
   }
 
-  function loadCurrentRecipe(recipes) {
-    const recipeId = localStorage.getItem("currentRecipeId");
-    return recipes.find(recipe => recipe.id == recipeId) || null;
-  }
-
-  function saveCurrentRecipe(recipe) {
-    if (recipe === null) {
-      localStorage.removeItem("currentRecipeId");
-    } else {
-      localStorage.setItem("currentRecipeId", recipe.id);
-    }
-  }
-
   function switchRecipe(event) {
     const index = teaRecipes.indexOf(currentRecipe);
     const len = teaRecipes.length;
@@ -101,13 +90,13 @@
   }
 
   function enterRecipe(recipe) {
-    currentRecipe = recipe;
-    saveCurrentRecipe(recipe);
+    currentRecipeId = recipe.id;
+    localStorage.setItem("currentRecipeId", recipe.id);
   }
 
   function listRecipes() {
-    currentRecipe = null;
-    saveCurrentRecipe(currentRecipe);
+    currentRecipeId = null;
+    localStorage.removeItem("currentRecipeId");
   }
 </script>
 
@@ -202,10 +191,10 @@
 
 <svelte:window
   use:swipe
-  on:swipe={e => e.detail[gesture.RIGHT] && listRecipes()} />
+  onswipe={e => e.detail[gesture.RIGHT] && listRecipes()} />
 <nav class="back">
   {#if currentRecipe !== null}
-    <NavIcon on:click={listRecipes} icon="arrow left" label="Back" />
+    <NavIcon onclick={listRecipes} icon="arrow left" label="Back" />
   {/if}
 </nav>
 <h1>{title}</h1>
@@ -213,7 +202,7 @@
   <h2>PRESETS</h2>
   <div class="gallery">
     {#each teaRecipes as recipe}
-      <GalleryItem {recipe} on:click={() => enterRecipe(recipe)} />
+      <GalleryItem {recipe} onclick={() => enterRecipe(recipe)} />
     {/each}
   </div>
   <!-- <h2>CUSTOM ITEMS</h2> -->
@@ -221,21 +210,21 @@
   <BrewSchedule
     recipe={currentRecipe}
     {config}
-    on:switchRecipe={switchRecipe}
-    on:closeRecipe={listRecipes} />
+    onSwitchRecipe={switchRecipe}
+    onCloseRecipe={listRecipes} />
 {/if}
 
 <nav class="menu">
-  <NavIcon on:click={toggleMenu} icon="menu" label="Menu" />
+  <NavIcon onclick={toggleMenu} icon="menu" label="Menu" />
 </nav>
 {#if config.menu}
   <div
     class="config-menu"
     transition:fly={{ from: 'top', duration: 150 }}
     use:swipe={{ lockScroll: true }}
-    on:swipe={e => e.detail[gesture.UP] && toggleMenu()}>
+    onswipe={e => e.detail[gesture.UP] && toggleMenu()}>
     <nav class="menu">
-      <NavIcon on:click={toggleMenu} icon="arrow up" label="Close" />
+      <NavIcon onclick={toggleMenu} icon="arrow up" label="Close" />
     </nav>
     <h1>Configuration</h1>
     <div>
@@ -249,7 +238,7 @@
           id="notifications"
           type="checkbox"
           bind:checked={config.notifications}
-          on:change={toggleNotifications} />
+          onchange={toggleNotifications} />
       </div>
     {/if}
     <hr />
@@ -262,12 +251,12 @@
     </div>
     {#if config.showExportImport}
       <div>
-        <button on:click={exportRecipes}>Export</button>
+        <button onclick={exportRecipes}>Export</button>
         <span class="import">
           <button>Import</button>
-          <input type="file" on:change={importRecipes} />
+          <input type="file" onchange={importRecipes} />
         </span>
-        <button on:click={resetRecipes}>Reset</button>
+        <button onclick={resetRecipes}>Reset</button>
       </div>
     {/if}
   </div>

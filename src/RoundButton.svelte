@@ -1,5 +1,5 @@
 <script>
-  let { icon, label } = $props();
+  let { icon, label, onclick } = $props();
 </script>
 
 <style>
@@ -38,4 +38,4 @@
   }
 </style>
 
-<button class={icon} on:click type="button" aria-label={label} ></button>
+<button class={icon} {onclick} type="button" aria-label={label} ></button>
