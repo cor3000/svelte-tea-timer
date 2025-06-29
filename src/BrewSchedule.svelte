@@ -349,7 +349,8 @@
       <div
         bind:this={progressGradientElement}
         class="timer"
-        on:click={toggleTimer}>
+        on:click={toggleTimer}
+        role="none">
         <div>
           <span class="time">
             <span>

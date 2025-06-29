@@ -205,7 +205,7 @@
   on:swipe={e => e.detail[gesture.RIGHT] && listRecipes()} />
 <nav class="back">
   {#if currentRecipe !== null}
-    <NavIcon on:click={listRecipes} icon="arrow left" />
+    <NavIcon on:click={listRecipes} icon="arrow left" label="Back" />
   {/if}
 </nav>
 <h1>{title}</h1>
@@ -226,7 +226,7 @@
 {/if}
 
 <nav class="menu">
-  <NavIcon on:click={toggleMenu} icon="menu" />
+  <NavIcon on:click={toggleMenu} icon="menu" label="Menu" />
 </nav>
 {#if config.menu}
   <div
@@ -235,7 +235,7 @@
     use:swipe={{ lockScroll: true }}
     on:swipe={e => e.detail[gesture.UP] && toggleMenu()}>
     <nav class="menu">
-      <NavIcon on:click={toggleMenu} icon="arrow up" />
+      <NavIcon on:click={toggleMenu} icon="arrow up" label="Close" />
     </nav>
     <h1>Configuration</h1>
     <div>

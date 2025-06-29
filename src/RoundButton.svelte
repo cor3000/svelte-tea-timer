@@ -1,9 +1,10 @@
 <script>
   export let icon;
+  export let label;
 </script>
 
 <style>
-  div {
+  button {
     position: relative;
     height: 3.4rem;
     width: 3.4rem;
@@ -11,8 +12,11 @@
     min-height: 3.4rem;
     border: 1px solid #979797;
     border-radius: 50%;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
   }
-  div::after {
+  button::after {
     content: "";
     display: block;
     position: absolute;
@@ -22,17 +26,17 @@
     width: 1rem;
   }
 
-  div.arrow-right::after,
-  div.arrow-left::after {
+  button.arrow-right::after,
+  button.arrow-left::after {
     border: 1px solid #979797;
     border-left: none;
     border-bottom: none;
     transform: translate(-71%, -50%) rotate(45deg);
   }
 
-  div.arrow-left::after {
+  button.arrow-left::after {
     transform: translate(-29%, -50%) rotate(-135deg);
   }
 </style>
 
-<div class={icon} on:click></div>
+<button class={icon} on:click type="button" aria-label={label} ></button>

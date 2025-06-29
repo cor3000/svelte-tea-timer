@@ -1,17 +1,21 @@
 <script>
   export let icon;
+  export let label
 </script>
 
 <style>
-  i {
+  button {
     display: inline-block;
     width: 2rem;
     height: 2rem;
     position: relative;
     cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
   }
-  i::after,
-  i::before {
+  button::after,
+  button::before {
     box-sizing: border-box;
     content: "";
     display: block;
@@ -23,23 +27,23 @@
     border-style: solid;
   }
 
-  i.menu::after {
+  button.menu::after {
     border-width: 1px 0;
     width: 1.6rem;
     height: 1.5rem;
   }
 
-  i.menu::before {
+  button.menu::before {
     border-width: 1px 0 0 0;
     width: 1.6rem;
   }
 
-  i.arrow::before {
+  button.arrow::before {
     border-width: 1px 0 0 0;
     width: 2rem;
   }
 
-  i.arrow::after {
+  button.arrow::after {
     width: 1rem;
     height: 1rem;
     border: 1px solid #979797;
@@ -48,15 +52,15 @@
     transform: translate(-11%, -50%) rotate(45deg);
   }
 
-  i.left {
+  button.left {
     transform: rotate(180deg);
   }
-  i.up {
+  button.up {
     transform: rotate(-90deg);
   }
-  i.down {
+  button.down {
     transform: rotate(90deg);
   }
 </style>
 
-<i class={icon} on:click></i>
+<button class={icon} on:click aria-label={label}></button>
