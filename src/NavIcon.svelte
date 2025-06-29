@@ -59,4 +59,4 @@
   }
 </style>
 
-<i class={icon} on:click />
+<i class={icon} on:click></i>

@@ -23,6 +23,6 @@
 </style>
 
 <div {...extraProps} on:click>
-  <i style="background-color: {color}" />
-  <slot />
+  <i style="background-color: {color}"></i>
+  <slot></slot>
 </div>

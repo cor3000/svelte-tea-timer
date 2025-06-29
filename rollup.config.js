@@ -1,7 +1,7 @@
 import svelte from 'rollup-plugin-svelte';
 import css from 'rollup-plugin-css-porter';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 
@@ -33,7 +33,11 @@ export default {
 			raw: production ? false : 'public/bundle.css'
 		}),
 
-		resolve({ browser: true }),
+		resolve({
+			browser: true,
+			dedupe: ['svelte'],
+			exportConditions: ['svelte']
+		}),
 		commonjs(),
 
 		// Watch the `public` directory and refresh the

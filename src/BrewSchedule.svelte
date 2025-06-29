@@ -318,13 +318,13 @@
 
 <svelte:window on:keydown={handleKey} />
 
-<div use:swipe on:swipe={swipeRecipe}>
+<div use:swipe={{ lockScroll: true }} on:swipe={swipeRecipe}>
   <GalleryItemBox color={recipe.color}>
     <div class="label1">{recipe.label}</div>
     <div class="label2">{recipe.name}</div>
   </GalleryItemBox>
 </div>
-<audio src="Bing.mp3" id="bing" />
+<audio src="Bing.mp3" id="bing"></audio>
 <nav class="times">
   <button on:click={prev}>Prev</button>
   <ul>

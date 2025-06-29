@@ -35,4 +35,4 @@
   }
 </style>
 
-<div class={icon} on:click />
+<div class={icon} on:click></div>
