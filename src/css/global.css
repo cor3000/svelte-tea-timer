@@ -1,6 +1,7 @@
-
 html { 
 	font-size: 3vw;
+	scrollbar-width: thin;
+	scrollbar-color: #888 rgb(51, 51, 51);
 } 
 
 @media (orientation: landscape) {
@@ -33,4 +34,22 @@ input, textarea {
 
 button {
 	touch-action: manipulation;
+}
+
+html::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+html::-webkit-scrollbar-track {
+	background: rgb(51, 51, 51);
+}
+
+html::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 4px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }

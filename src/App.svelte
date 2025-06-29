@@ -3,7 +3,6 @@
 
   import GalleryItem from "./GalleryItem.svelte";
   import BrewSchedule from "./BrewSchedule.svelte";
-  import RoundButton from "./RoundButton.svelte";
   import NavIcon from "./NavIcon.svelte";
 
   import { recipes as defaultRecipes } from "./defaultRecipes.js";
@@ -113,6 +112,7 @@
 </script>
 
 <style>
+  
   h1 {
     font-size: 1.8rem;
     color: white;
