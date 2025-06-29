@@ -1,6 +1,5 @@
 <script>
-  export let icon;
-  export let label;
+  let { icon, label } = $props();
 </script>
 
 <style>

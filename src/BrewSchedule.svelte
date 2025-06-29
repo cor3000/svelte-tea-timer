@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from "svelte";
+  import { createEventDispatcher, untrack } from "svelte";
   import GalleryItemBox from "./GalleryItemBox.svelte";
   import { createTimer } from "./timer.js";
   import { formatTime, formatDecis } from "./format.js";
@@ -8,19 +8,30 @@
 
   const dispatch = createEventDispatcher();
 
-  export let recipe;
-  export let config;
+  let { recipe, config } = $props();
 
-  let currentIndex = 0;
-  let currentOffset = 0;
-  let remainingTime = 0;
-  let running = false;
+  let currentIndex = $state(0);
+  let currentOffset = $state(0);
+  let remainingTime = $state(0);
+  let running = $state(false);
 
-  const timer = createTimer(recipe.brewTimes[currentIndex].time, tick, finish);
+  const timer = createTimer(recipe.brewTimes[currentIndex], tick, finish);
   let progressGradientElement;
 
-  onMount(resetTimer);
-  onDestroy(resetTimer);
+  $effect(() => {
+    timer.reset(recipe.brewTimes[currentIndex]);
+
+    // Untrack all other updates to prevent reactive loops. The offset is applied
+    // here on reset, but changing currentOffset directly won't re-run the effect.
+    untrack(() => {
+      timer.offset(currentOffset);
+      updateTimerVars(timer);
+      updateProgressGradient();
+    });
+
+    // The cleanup function runs when the component is unmounted, stopping the timer.
+    return () => timer.reset();
+  });
 
   function swipeRecipe(event) {
     switch (event.detail.gesture) {
@@ -31,6 +42,7 @@
         switchRecipe(-1);
         break;
     }
+    event.preventDefault;
   }
 
   function switchRecipe(offset) {
@@ -98,11 +110,9 @@
 
   function prev() {
     currentIndex = Math.max(currentIndex - 1, 0);
-    resetTimer();
   }
   function next() {
     currentIndex = Math.min(currentIndex + 1, recipe.brewTimes.length - 1);
-    resetTimer();
   }
 
   function offset(seconds) {
@@ -116,16 +126,16 @@
     remainingTime = timer.remaining();
   }
 
+  function updateTimerVars(timer) {
+    remainingTime = timer.remaining();
+    running = timer.isRunning();
+  }
+
   function resetTimer() {
     timer.reset(recipe.brewTimes[currentIndex]);
     timer.offset(currentOffset);
     updateTimerVars(timer);
     updateProgressGradient();
-  }
-
-  function updateTimerVars(timer) {
-    remainingTime = timer.remaining();
-    running = timer.isRunning();
   }
 
   function toggleTimer() {

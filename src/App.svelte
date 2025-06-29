@@ -9,18 +9,18 @@
   import { swipe, gesture } from "./swipe.js";
   import { fly } from "./transitions.js";
 
-  export let title;
+  let { title } = $props();
 
-  let teaRecipes = loadRecipes(defaultRecipes);
+  let teaRecipes = $state(loadRecipes(defaultRecipes));
 
-  let currentRecipe = loadCurrentRecipe(teaRecipes);
-  let config = {
+  let currentRecipe = $state(loadCurrentRecipe(teaRecipes));
+  let config = $state({
     menu: false,
     sound: true,
     showExportImport: false,
     notifications:
       window.Notification && window.Notification.permission === "granted"
-  };
+  });
 
   function toggleMenu() {
     config.menu = !config.menu;

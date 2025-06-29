@@ -1,6 +1,5 @@
 <script>
-  export let color;
-  export let extraProps = {};
+  let { color, extraProps = {} } = $props();
 </script>
 
 <style>

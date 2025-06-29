@@ -3,7 +3,7 @@
   import RoundButton from "./RoundButton.svelte";
   import { formatTime } from "./format.js";
 
-  export let recipe;
+  let { recipe } = $props();
 </script>
 
 <style>
