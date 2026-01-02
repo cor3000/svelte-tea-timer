@@ -13,7 +13,7 @@
   let remainingTime = $state(0);
   let running = $state(false);
 
-  const timer = createTimer(recipe.brewTimes[0], tick, finish);
+  const timer = createTimer(0, tick, finish);
   let progressGradientElement;
 
   $effect(() => {
