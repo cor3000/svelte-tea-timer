@@ -9,4 +9,4 @@ sed -i "s/CACHE_VERSION = $oldver;\$/CACHE_VERSION = $newver;/g" public/sw.js
 
 rm -rf public/build/
 npm run build
-npm run surge
+npx wrangler deploy
