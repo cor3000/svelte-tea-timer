@@ -15,6 +15,7 @@
     "preview": "vite preview",
     "start": "wrangler dev",
     "chromium:dev": "chromium --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-mcp http://localhost:5173/",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "postdeploy": "node scripts/tag-deploy.js"
   }
 }
