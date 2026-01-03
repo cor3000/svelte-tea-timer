@@ -11,7 +11,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "node scripts/bump-sw-version.js",
     "preview": "vite preview",
-    "start": "wrangler dev"
+    "start": "wrangler dev",
+    "chromium:dev": "chromium --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-mcp http://localhost:5173/",
+    "deploy": "npm run build && wrangler deploy"
   }
 }

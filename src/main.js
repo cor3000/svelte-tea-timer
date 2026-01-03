@@ -1,5 +1,6 @@
 import './css/normalize.css';
 import './css/global.css';
+import './sw-register.js';
 import App from './App.svelte';
 import { mount } from 'svelte';
 
