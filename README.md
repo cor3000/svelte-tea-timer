@@ -1,49 +1,53 @@
 # Tea Timer
 
-This project uses [Svelte](https://svelte.dev). And was created from https://github.com/sveltejs/template.
+Svelte app built with Vite and deployed as static assets via Cloudflare Wrangler.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
-
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
+## Setup
 
 ```bash
-cd svelte-app
 npm install
 ```
 
-...then start the [Vite](https://vitejs.dev) dev server:
+## Development
+
+Run the Vite dev server:
 
 ```bash
 npm run dev
 ```
 
-Navigate to [localhost:5173](http://localhost:5173). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+Open [localhost:5173](http://localhost:5173).
 
+## Build
 
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
+Create a production build in `dist/`:
 
 ```bash
-npm install -g now
+npm run build
 ```
 
-Then, from within your project folder:
+After the build, `dist/sw.js` gets a new cache version string so service worker updates are picked up on deploy.
+
+Preview the production build locally:
 
 ```bash
-now
+npm run preview
 ```
 
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
+## Cloudflare (Wrangler)
+
+Run `wrangler dev` against the built assets:
+
+```bash
+npm run start
+```
+
+Wrangler dev defaults to port `8787` (for example, `http://localhost:8787/`).
+
+Deploy (build + service worker version bump + wrangler deploy):
+
+```bash
+npm run deploy
+```
+
+After a successful deploy, a local git tag is created in the format `deploy-YYYYMMDD-HHMMSS`.
